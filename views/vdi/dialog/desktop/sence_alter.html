@@ -1,0 +1,218 @@
+<div class="modal-header">
+	<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title"  localize="修改场景">修改场景</h4>
+</div>
+<div class="modal-body">
+	<form class="form-horizontal padding-10" name="alterSenceForm" action="" novalidate> 
+		<div class="padding-10">
+			<fieldset>
+				<div class="form-group">
+					<label class="col-xs-3 control-label" localize="场景名">场景</label>
+					<div class="col-xs-6">
+						<input class="form-control" type="text" ng-model="name" required>
+					</div>
+				</div>
+				<!-- <div class="form-group">
+					<label class="col-xs-3 control-label">最大桌面数</label>
+					<div class="col-xs-9">
+						<input id="spinner" class="form-control" type="number" min="{{instance_min}}" max="200" ng-class="{'ng-invalid':info.instance_max<instance_min?true:false}" ng-model="instance_max" ng-pattern="/^\s*((1[0-9][0-9])|([1-9][0-9]?)|200)\s*$/" required>
+					</div>
+					
+				</div> -->
+				<!-- <div class="form-group ">
+					<label class="col-xs-3 control-label"  localize="桌面数">桌面数</label>
+					<div class="col-xs-7">
+						<input class="form-control" type="number" min="{{min_instances}}" max="{{max_instances}}" data-ng-model="desktopNum" ng-pattern="/^\s*(\d{1,})\s*$/" required>
+					</div>
+					<label class="col-xs-2 note">{{min_instances}}~{{max_instances}}</label>
+				</div> -->
+				
+			<!-- 	<div class="form-group">
+					<label class="col-xs-3 control-label"  localize="所属教室">所属教室</label>
+					<div class="col-xs-9">
+						<select class="form-control" ng-options="pool.name for pool in pools track by pool.id"  ng-model="schoolroom">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label"  localize="网络">网络</label>
+					<div class="col-xs-6">
+						<input class="form-control" type="text"  ng-model="schoolroom.network_cidr" required disabled>
+					</div>
+				</div> -->
+				<div class="form-group">
+					<label class="col-xs-3 control-label"  localize="还原设置">还原设置</label>
+					<div class="col-xs-4">
+						<select class="form-control" data-ng-model="rollback" ng-disabled="running_count!==0" data-ng-change="rollbackChange(rollback)">
+							<option value="0"  localize="无还原设置">不还原</option>
+							<option value="1"  localize="每次都还原">每次还原</option>
+							<option value="2"  localize="按周还原">按周还原</option>
+							<option value="3"  localize="按月还原">按月还原</option>
+						</select> 
+					</div>
+					<div class="col-xs-4" ng-if="rollback == 2">
+						<select class="form-control" ng-model="$parent.rollback_weekday" ng-disabled="running_count!==0">
+							<option value="1"  localize="周一">周一</option>
+							<option value="2"  localize="周二">周二</option>
+							<option value="3"  localize="周三">周三</option>
+							<option value="4"  localize="周四">周四</option>
+							<option value="5"  localize="周五">周五</option>
+							<option value="6"  localize="周六">周六</option>
+							<option value="7"  localize="周日">周日</option>
+						</select>
+					</div>
+					<div class="col-xs-4" ng-if="rollback == 3">
+						<select class="form-control" ng-model="$parent.rollback_monthday" ng-disabled="running_count!==0">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+							<option value="14">14</option>
+							<option value="15">15</option>
+							<option value="16">16</option>
+							<option value="17">17</option>
+							<option value="18">18</option>
+							<option value="19">19</option>
+							<option value="20">20</option>
+							<option value="21">21</option>
+							<option value="22">22</option>
+							<option value="23">23</option>
+							<option value="24">24</option>
+							<option value="25">25</option>
+							<option value="26">26</option>
+							<option value="27">27</option>
+						</select>
+					</div>
+					<label class="col-xs-offset-3 col-xs-4 note" ng-show="running_count!==0"  localize="MESS_SENCEALTER">桌面必须关闭后才能修改此项</label>
+				</div>
+				<div class="form-group" ng-show="disk_type">
+					<label class="col-xs-3 control-label"  localize="数据盘清除">数据盘清除</label>
+					<div class="col-xs-4">
+						<select class="form-control" data-ng-model="data_rollback" ng-disabled="running_count!==0">
+							<option value="0"  localize="不清除">不清除</option>
+							<option value="1"  localize="每次清除">每次清除</option>
+							<option value="2"  localize="按周清除">按周清除</option>
+							<option value="3"  localize="按月清除">按月清除</option>
+						</select> 
+					</div>
+					<div class="col-xs-4" ng-if="data_rollback == 2">
+						<select class="form-control" ng-model="$parent.data_rollback_weekday" ng-disabled="running_count!==0">
+							<option value="1"  localize="周一">周一</option>
+							<option value="2"  localize="周二">周二</option>
+							<option value="3"  localize="周三">周三</option>
+							<option value="4"  localize="周四">周四</option>
+							<option value="5"  localize="周五">周五</option>
+							<option value="6"  localize="周六">周六</option>
+							<option value="7"  localize="周日">周日</option>
+						</select>
+					</div>
+					<div class="col-xs-4" ng-if="data_rollback == 3">
+						<select class="form-control" ng-model="$parent.data_rollback_monthday" ng-disabled="running_count!==0">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+							<option value="14">14</option>
+							<option value="15">15</option>
+							<option value="16">16</option>
+							<option value="17">17</option>
+							<option value="18">18</option>
+							<option value="19">19</option>
+							<option value="20">20</option>
+							<option value="21">21</option>
+							<option value="22">22</option>
+							<option value="23">23</option>
+							<option value="24">24</option>
+							<option value="25">25</option>
+							<option value="26">26</option>
+							<option value="27">27</option>
+						</select>
+					</div>
+					<label class="col-xs-offset-3 col-xs-4 note" ng-show="running_count!==0"  localize="MESS_SENCEALTER">桌面必须关闭后才能修改此项</label>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-offset-3 col-xs-9">
+						<label class="checkbox-inline">
+							<input type="checkbox" class="checkbox style-0" ng-model="usb_redir"  ng-disabled="running_count!==0">
+							<span  localize="USB使用">USB使用</span>
+						</label>
+
+					</div>
+				</div>
+
+				<!-- <div class="form-group ">
+					<div class="col-xs-offset-3 col-xs-8">
+						<label class="checkbox-inline">
+							<input type="checkbox" class="checkbox style-0" ng-model="has_domain">
+							<span localize="加入域">加入域</span>
+						</label>
+					</div>
+				</div>
+				<div class="form-group" ng-show="has_domain">
+					<label class="col-xs-3 control-label" localize="域控制器">域控制器</label>
+					<div class="col-xs-6" >
+						<select class="form-control" data-ng-model="domain" data-ng-options="domain.name for domain in domains track by domain.id">
+						</select>
+					</div>
+				</div> -->
+				<div class="form-group" >
+					<div class="col-xs-offset-3 col-xs-9">
+						<label class="checkbox-inline">
+							<input type="checkbox" class="checkbox style-0" ng-model="need_ha" ng-disabled="running_count!==0||rollback != 1 || servers.length < 1">
+							<span localize="启用全局HA">启用全局HA</span>
+						</label>
+						
+					</div>
+				</div>
+				<div class="form-group" ng-show="running_count==0 && need_ha">
+					<div class="col-xs-offset-3 col-xs-6">
+						<label class="form-label" data-localize="优先启用HA服务器" ng-class="{required:need_ha}">优先启用HA服务器</label>
+						<div class="form-unit">
+							<div class="tagarea">
+								<div class="tag-checkbox">
+								</div>
+								<div class="tag-wrap">
+									<label class="tag" ng-class="{on:server._selected}" ng-repeat="server in servers" >
+										 <input type="checkbox" ng-model="server._selected" ng-disabled="rollback != 1">
+										 {{server.host}}
+									</label>
+									<label ng-show="agents.length ===0">不存在HA服务器</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<footer class="text-right">
+					<button type="button" class="btn btn-primary" ng-click="ok()" ng-class="{'disabled':alterSenceForm.$invalid}"  localize="确定">
+						确定
+					</button>
+					<button type="button" class="btn btn-default" ng-click="close()"  localize="取消">
+						取消
+					</button>
+
+				</footer>
+			</fieldset>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	$(".slider").slider();
+</script>

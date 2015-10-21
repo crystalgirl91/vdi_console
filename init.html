@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" ng-app="vdi.init" >
+<head>
+	<meta charset="UTF-8">
+	<title localize="系统初始化">系统初始化</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/font-jj.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+	<link rel="stylesheet" href="css/your_style.css">
+</head>
+<style type="text/css">
+	html,body{background:#BEC3C9;}
+</style>
+<body  ng-controller="initController">
+	<div class="init">
+		<init:step style="display:none" data-language="{{langCode}}">
+			<!-- <step:cont data-title="选择语言" data-btn-name="下一步"  data-post-data="initLang()">
+                <div class="form-group text-center">
+                    <div class="radio">
+                        <label  style="padding-right:100px;">
+                            <input type="radio" name="style-0" ng-model="$parent.$parent.langCode" value="en" class="radiobox style-0 ng-valid ng-dirty" ng-change="setLanguage()">
+                            <span>English</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="style-0" ng-model="$parent.$parent.langCode" value="zh_cn" class="radiobox style-0 ng-valid ng-dirty" ng-change="setLanguage()">
+                            <span>简体中文</span>
+                        </label>
+                    </div>
+                </div>
+			</step:cont>	 -->
+<!-- 			<step:cont data-title="选择网卡" data-btn-name="下一步" data-init-data="get_nic()" data-post-data="init_nic()">	
+					<table class="table table-hover table-condensed">
+						<thead>
+							<tr>
+								<th localize="操作">操作</th>
+								<th localize="模板名">模板</th>
+								<th localize="操作">操作</th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr data-ng-repeat="item in nicList">
+								<td>{{item.name}}</td>
+								<td>{{item.addr}}</td>
+								<td>
+									<div class="radio">
+										<label>
+											<input ng-value="item" ng-model="$parent.$parent.$parent.nic" type="radio" name="radio-inline" class="radiobox style-0" required>
+											<span></span> 
+										</label>
+									</div>
+								</td>  
+								
+							</tr>
+						</tbody>
+					</table>
+			</step:cont> -->
+			<step:cont data-title="检查安装环境" data-btn-name="开始初始化" data-init-data="checkEnvir()">
+					<div class="form-group">
+						<label class="col-xs-5 control-label" localize="当前安装的版本为">当前安装的版本为</label>
+						<label class="col-xs-6"><input class="form-control" ng-model="curVersion" type="text" disabled></label>
+					</div>
+					<div class="form-group" data-ng-repeat="host in hosts ">
+						<label class="col-xs-5 control-label" localize="服务器">服务器</label>
+						<label class="col-xs-6"><input class="form-control" ng-model="host.ip" type="text"  disabled></label>
+						<label class="control-label"><i class="fa txt-color-greenjj icon-jj-Complete" ng-show="host.ready"></i><i ng-show="!host.ready" class="fa txt-color-redjj  icon-jj-close-2"></i></label>
+					</div>
+			</step:cont>
+			<step:cont data-title="导入默认数据" data-btn-name="下一步" data-init-data="importData()" data-post-data="addNetwork()">
+					<div class="row">
+						<label class="col-xs-10 control-label" localize="建立超级管理员账户">建立超级管理员账户</label>
+						<label class="col-xs-2 control-label text-left"><i ng-show="init_data" class="fa txt-color-greenjj icon-jj-Complete"></i></label>
+					</div>
+					<div class="row">
+						<label class="col-xs-10 control-label" localize="建立Projects">建立Projects</label>
+						<label class="col-xs-2 control-label text-left"><i ng-show="init_data" class="fa txt-color-greenjj icon-jj-Complete"></i></label>
+					</div>
+					<!-- <div class="row">
+						<label class="col-xs-10 control-label" localize="建立本地存储">建立本地存储</label>
+						<label class="col-xs-2 control-label text-left"><i ng-show="init_data" class="fa txt-color-greenjj icon-jj-Complete"></i></label>
+					</div> -->
+                    <div class="row">
+						<label class="col-xs-10 control-label" localize="建立默认教室">建立默认教室</label>
+						<label class="col-xs-2 control-label text-left"><i ng-show="init_data" class="fa txt-color-greenjj icon-jj-Complete"></i></label>
+					</div>
+                    <div class="row">
+						<label class="col-xs-10 control-label" localize="建立默认硬件模板">建立默认硬件模板</label>
+						<label class="col-xs-2 control-label text-left"><i ng-show="init_data" class="fa txt-color-greenjj icon-jj-Complete"></i></label>
+					</div>
+                    <div class="row">
+						<label class="col-xs-10 control-label" localize="初始化客户端配置">初始化客户端配置</label>
+						<label class="col-xs-2 control-label text-left"><i ng-show="init_data" class="fa txt-color-greenjj icon-jj-Complete"></i></label>
+					</div>
+                    <div class="row">
+						<label class="col-xs-10 control-label" localize="初始化网络">初始化网络</label>
+						<label class="col-xs-2 control-label text-left"><i ng-show="init_data" class="fa txt-color-greenjj icon-jj-Complete"></i></label>
+					</div>
+			</step:cont>
+			<step:cont data-title="初始化学期" data-lang-version="version" data-btn-name="下一步" data-post-data="initSchedule()">
+				<div class="form-group">
+                        <tabset>
+                            <tab heading="周时间">
+                                <div class="padding-10">
+                                    <div class="row">
+                                        <div class="col-md-4" localize="学期开始时间">学期开始时间</div>
+                                        <div class="col-md-8">
+                                            <p class="input-group">
+                                            <input type="text"
+                                                class="form-control"
+                                                datepicker-popup="yyyy-MM-dd"
+                                                data-ng-model="$parent.$parent.$parent.start_time"
+                                                is-open="$parent.$parent.$parent.startDateOpened"
+                                                datepicker-options="startDateOptions"
+                                                data-ng-required="true"
+                                                ng-change="startTimeChange()"
+                                                show-weeks="false"
+                                                show-button-bar="false">
+                                            <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" data-ng-click="openStartDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4" localize="学期结束时间">学期结束时间</div>
+                                        <div class="col-md-8">
+                                            <p class="input-group">
+                                                <input type="text"
+                                                    class="form-control"
+                                                    datepicker-popup="yyyy-MM-dd"
+                                                    data-ng-model="$parent.$parent.$parent.end_time"
+                                                    is-open="$parent.$parent.$parent.endDateOpened"
+                                                    min-date="minEndTime()"
+                                                    max-date="maxEndTime()"
+                                                    datepicker-options="endDateOptions"
+                                                    data-ng-required="true"
+                                                    show-weeks="false"
+                                                    show-button-bar="false">
+                                                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" data-ng-click="openEndDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                        </tabset>
+                    </div>
+			</step:cont>
+			<step:cont  data-title="完成">
+					<div class="form-group">
+						<span  localize="MESS_INIT__FINISH">恭喜系统初始化完成！现在可以</span><button type="button" class="btn btn-sm btn-success btn-next loginmanagement" localize="进入管理台" ng-click="gotoLogin()" ></button>
+					</div>
+            </step:cont>
+		</init:step>
+	</div>
+	<div class="copyright">
+		<p localize="噢易云计算">噢易云计算</p>
+		<p data-ng-if="version != 'korean' && version != 'dev_fan'">www.os-easy.com</p>
+		<p data-ng-if="version == 'korean'">www.s2network.co.kr</p>
+		<p data-ng-if="version == 'dev_fan'">www.acctc.com.tw</p>
+	</div>
+</body>
+
+<script src="js/libs/jquery-2.1.1.js"></script>
+<script src="js/vdi/config.js"></script>
+<script src="js/vdi/dev_config.js"></script>
+<script src="js/vdi/oem.js"></script>
+
+<script src="js/libs/angular/angular.js"></script>
+<script src="js/libs/angular/angular-route.js"></script>
+<script src="js/libs/angular/angular-resource.js"></script>
+
+<script src="js/ng/ng.directives.js"></script>
+<script src="js/ng/ng.controllers.js"></script>
+<script src="js/libs/angular/angular-resource.js"></script>
+
+<script src="js/libs/angular/ui-bootstrap-custom-tpls-0.11.0.js"></script>
+<script src="js/vdi/resource.js"></script>
+<script src="js/vdi/dialogs.js"></script>
+<script src="js/vdi/directives.js"></script>
+<script src="js/notification/SmartNotification.min.js"></script>
+<!-- <script src="js/libs/angular/i18n/angular-locale_zh.js"></script>
+<script src="js/libs/angular/i18n/angular-locale_af-na.js"></script> -->
+
+<script>
+// var xhr = new XMLHttpRequest();
+// xhr.open("get", $Domain + "/thor/init/record_lang", false);
+// xhr.send();
+// try{
+// var s = JSON.parse(xhr.responseText);
+// }
+// catch(e){
+// 	console.log("213", e);
+// }
+var _ver = $$$version;
+if(_ver === "cloudClassCh" || _ver ==="dev" || _ver ==="dev_fan"){
+	document.write('<script src="js/libs/angular/i18n/angular-locale_zh.js"><\/' + 'script>');
+}
+</script>
+
+<script>
+
+angular.module("vdi.init",["ngRoute","ngResource", "ui.bootstrap", "vdi.resource", "vdi.dialogs","vdi.directives","app.localize","app.controllers"])
+.config(["$httpProvider",function($httpProvider){
+	$httpProvider.interceptors.push(function($q){
+		return{
+			"response":function(res){
+				if(/^https?\:\/\//.test(res.config.url)){
+					if(/\/thor\/toolkit\//.test(res.config.url)){
+						return res;
+					}
+					else{
+						switch(res.data.code){
+							case 0:
+								return res;
+							    break;
+							default:
+								$.bigBox({
+									title : $$$MSG.get("PAI_CODE") + res.data.code,
+									content : $$$MSG.get(res.data.code),
+									color : "#C46A69",
+									icon : "fa fa-warning shake animated",
+									timeout : 6000
+								});
+							break;
+						}
+					}
+					return $q.reject({AAA:res});
+				}
+				return res;
+			}
+		}
+	});
+	
+}])
+.controller("initController", ["$scope","init","localize","settings","$q",function($scope,init,localize,settings,
+	$q){
+
+
+    $scope.gotoLogin = function(){
+    	init.init_complete(function(){
+    		location.replace("login.html");
+    	});
+    } 
+
+    //获取及设置页面语言
+    $scope.setLanguage = function(){
+
+    	var lang = settings.languages.filter(function(l) {return l.langCode === $scope.langCode; })[0];
+    	$scope.currentLang = lang;
+    	localize.setLang(lang);
+    	localStorage.i18n_code = lang.langCode;
+    }
+    init.get_language(function(res){
+    	switch(res.language){
+    		case "develop":
+    			$scope.langCode = "develop";
+    			break;
+    		case "production":
+    			$scope.langCode = "production";
+    			break;
+    		default :
+    			$scope.langCode = "production";
+
+    	}
+    	$scope.setLanguage ();
+    });
+	//选择学期插件
+	var _scope = $scope;
+    var num_day = 3600 * 1000 * 24;
+    var _time = new Date();
+    _time.setMonth(_time.getMonth()+3);
+	$scope.start_time = _scope.start_time || new Date();
+    $scope.end_time = _scope.end_time || _time;
+    $scope.classHours = _scope.classHours;
+    $scope.startDateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
+    $scope.endDateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
+    $scope.minEndTime = function(){
+        return $scope.start_time.getTime() + num_day;
+    };
+    $scope.maxEndTime = function(){
+        return $scope.start_time.getTime() + num_day * 180;
+    };
+    $scope.openStartDate = function($event){
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.startDateOpened = true;
+    };
+    $scope.openEndDate = function($event){
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.endDateOpened = true;
+    };
+    $scope.startTimeChange = function(){
+        if($scope.start_time > $scope.end_time){
+            $scope.end_time = $scope.start_time;
+        }
+    };
+
+    // 分步骤初始化
+    //初始化网卡
+
+    $scope.get_nic = function(){
+    	var defer = $q.defer();
+    	init.get_nic(function(res){
+			$scope.nicList = res.nic;
+			$scope.nic = res.nic[0];
+    		defer.resolve(res);
+    	},function(res){
+    		defer.reject(res);
+    	})
+    	return defer.promise;
+    }
+    $scope.init_nic = function(){
+    	var defer = $q.defer;
+    	init.post_nic($scope.nic.name,function(res){
+
+    	});
+    	return defer.promise;
+    }
+	
+	// 初始化检查环境
+	$scope.checkEnvir = function(){
+		var defer = $q.defer();
+		init.check(function(res){
+			$scope.hosts = res.hosts;
+			$scope.curVersion = res.version;
+			defer.resolve(res);
+		},function(res){
+			defer.reject(res);
+		})
+		return defer.promise;
+	};
+	// 初始化导入数据
+	$scope.importData = function(){
+		var defer = $q.defer();
+		init.init_data(function(res){
+			$scope.init_data = true;
+			defer.resolve(res);
+		},function(res){
+			defer.reject(res);
+		});
+		return defer.promise;
+	};
+	// 初始化添加网络
+	$scope.addNetwork = function(){
+		init._add_network(function(){
+		});
+	};
+	// 初始化学期
+	$scope.initSchedule = function(){
+		var postData = {
+			"semester_start":$scope.start_time.getTime(),
+			"semester_end":$scope.end_time.getTime()
+		};
+		init.init_classes_setting(postData,function(){
+		});
+	};
+	$scope.version = $$$version;
+}])
+.directive("initStep", ["init","localize","settings",function(init,settings){
+	return {
+		restrict: "AE",
+		scope:{
+			language:"@",
+            getInit:"&"
+        },
+		transclude:true,
+		replace:false,
+		template:'<div class="init">\
+					<aside id="left-panel" class="left-panel">\
+						<div class="logo"><img ng-class="{cloudPC: version == \'cloudPC\',cloudClassEn: version == \'cloudClassEn\',cloudClassCh: version == \'cloudClassCh\',korean: version == \'korean\'}" ng-src="{{ domain }}/thor/get_image/{{ langCode }}init" alt="" /></div>\
+						<div class="step-list">\
+							<header localize="系统初始化">系统初始化</header>\
+							<ul>\
+			                    <li ng-repeat="step in steps" ng-class="{on:$index < currentIdx}"><i class="fa txt-color-greenjj icon-jj-Complete" ></i>{{$index+1}} &nbsp;&nbsp;<span  localize="{{step.title}}"></span></li>\
+							</ul>\
+						</div>\
+					</aside>\
+					<div id="main" class="main" >\
+						<header>\
+							<h3  class="title"><span>{{title()}}</span></h3>\
+						</header>\
+						<form class="form-horizontal">\
+							<div class="init-widget" ng-transclude>\
+							</div>\
+						</form>\
+						<div class="row init-btn-group" ng-show="!isLastStep()" class="submit-btn">\
+							<div class="{{btn}}">\
+								<button ng-class="{disabled:!btn}" type="button"  class="btn btn-sm btn-success btn-next" ng-click="goStep(-2)">{{btnName()}}</button>\
+							</div>\
+						</div>\
+					</div>\
+				</div>',
+		controller:function($scope){
+			var steps = $scope.steps =[];
+			$scope.btn = true;
+			$scope.currentIdx = 0;
+
+            init.test(function(res){
+                $scope.currentIdx = res.X;
+                // $scope.currentIdx = 2
+                $scope.goStep($scope.currentIdx);
+            });
+			$scope.domain = $Domain;
+			$scope.version = $$$version;
+			init.get_language(function(res){
+				switch(res.language){
+					case "develop":
+						$scope.langCode = "develop";
+						break;
+					case "production":
+						$scope.langCode = "production";
+						break;
+					default :
+						$scope.langCode = "production";
+				}
+			});
+			$scope.title = function(){
+				var a =$$$I18N.get($scope.currentStep.title);
+				return $$$I18N.get($scope.currentStep.title);
+			}
+			$scope.btnName = function(){
+				return $$$I18N.get($scope.currentStep.btnName);
+			}
+			$scope.isLastStep = function(){
+				return $scope.currentIdx === steps.length - 1
+			};
+			$scope.goStep = function(num){
+                steps.forEach(function(s){ s.active = false});
+                $scope.btn = false;
+                if(typeof(num)=="number" && num < steps.length && num >= 0){
+                	//跳入某一步
+                    $scope.currentIdx = num;
+                    $scope.currentStep = steps[$scope.currentIdx];
+                }else if(num == "-2"){
+                    //提交数据，并进入下一步
+                    $scope.currentStep.postData();
+                    $scope.currentIdx += 1;
+                    $scope.currentStep = steps[$scope.currentIdx];
+                }else if(num == "-1"){
+                	//跳入最后一步
+                    $scope.currentIdx = steps.length-1;
+                    $scope.currentStep = steps[$scope.currentIdx];
+                }
+                $scope.currentStep.active = true;
+                // 初始化数据
+                var promise = $scope.currentStep.initData();
+                if(promise){
+	                promise && promise.then(function(){
+	                	$scope.btn = true;
+	                },function(){
+	                	$scope.btn = false;
+	                });
+                }else{
+                	$scope.btn = true;
+                }
+
+			};
+			$scope.getLang = function(str){
+				return $$$I18n.get(str);
+			}
+
+			this.addStep = function(s){
+				if (steps.length === 0) {
+                    $scope.currentStep = s;
+                }
+                steps.push(s);
+			};				
+		},
+		link: function(scope, element, attrs){
+			element.css("display","block");
+		}
+	};
+}])
+.directive("stepCont",["localize",function(init){
+	return {
+		restrict: "AE",
+		transclude:true,
+		replace:false,
+		require:"^initStep",
+		template:'<div class="step-cont" ng-class="{active:active}" ng-transclude></div>',
+		scope: {
+	        title: '@',
+	        btnName:'@',
+	        langVersion:"=",
+	        initData:'&initData',
+	        postData:'&postData'
+	    },
+	    controller:function($scope){
+	    	$scope.active = false;
+	    },
+		link: function(scope, element, attrs,initStepCtr){
+			if(scope.langVersion != 'cloudPC'){
+				initStepCtr.addStep(scope);
+			}
+			
+		}
+	};
+}])
+</script>
+</html>

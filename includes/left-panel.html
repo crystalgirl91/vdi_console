@@ -1,0 +1,56 @@
+
+<!-- end user info -->
+
+<!-- NAVIGATION : This navigation is also responsive
+
+To make this navigation dynamic please make sure to link the node
+(the reference to the nav > ul) after page load. Or the navigation
+will not initialize.
+-->
+
+<navigation>
+	<nav:item data-view="/summary" data-icon="fa fa-lg fa-fw icon-jj-home" nav-title="概要" />
+	<nav:group data-icon="fa fa-lg fa-fw icon-jj-cloud" nav-title="资源池" >
+		<nav:item data-view="/resource/host" nav-title="主机管理" />
+		<nav:item data-view="/resource/network" nav-title="网络管理" />
+		<nav:item data-view="/resource/storage" nav-title="存储管理" />
+	</nav:group>
+	<nav:group data-icon="fa fa-lg fa-fw icon-jj-pc" nav-title="桌面" >
+		<nav:item data-view="/desktop/scene" nav-title="教学桌面" />
+		<nav:item data-view="/desktop/personal" nav-title="个人桌面" />
+	</nav:group>
+	<nav:group data-icon="fa fa-lg fa-fw  icon-jj-Template" nav-title="模板" >
+		<nav:item data-view="/template/teach" nav-title="教学模板" />
+		<nav:item data-view="/template/personal" nav-title="个人模板" />
+		<nav:item data-view="/template/hardware" nav-title="硬件模板" />
+	</nav:group>
+	<nav:group data-icon="fa fa-lg fa-fw icon-jj-Terminal" nav-title="终端" >
+		<nav:item data-view="/terminal/schoolroom" nav-title="教室管理" />
+		<nav:item data-view="/terminal/client" nav-title="终端管理" />
+		<!-- <nav:item data-view="/terminal/session" nav-title="会话管理" /> -->
+	</nav:group>
+	<nav:group data-icon="fa fa-lg fa-fw icon-jj-men" nav-title="用户" >
+		<nav:item data-view="/user/role" nav-title="角色管理" />
+		<nav:item data-view="/user/admin" nav-title="管理用户" />
+		<nav:item data-view="/user/common" nav-title="普通用户" />
+		<nav:item data-view="/user/domain" nav-title="域用户" />
+	</nav:group>
+	<nav:group data-icon="fa fa-lg fa-fw icon-jj-Monitor" nav-title="监控" >
+		<nav:item data-view="/monitor/host" nav-title="主机监控" />
+		<nav:item data-view="/monitor/desktop" nav-title="桌面监控" />
+		<nav:item data-view="/monitor/alarm" nav-title="告警信息" />
+		<!--<nav:item data-view="/monitor/logs" nav-title="日志下载" />-->
+	</nav:group>
+	<nav:group data-lang-version="version" data-icon="fa fa-lg fa-fw  icon-jj-paike" nav-title="排课" >
+		<nav:item data-view="/scheduler/view" nav-title="课程列表" />
+	</nav:group>
+	<nav:group data-icon="fa fa-lg fa-fw icon-jj-Setup" nav-title="系统" >
+		<nav:item data-view="/system/backup" nav-title="系统备份" />
+		<nav:item data-view="/system/iso" nav-title="系统 ISO" />
+		<nav:item data-view="/system/usb" nav-title="USB 重定向" />
+		<nav:item data-view="/system/upgrade" nav-title="系统升级" />
+		<nav:item data-view="/system/logs" nav-title="操作日志" />
+	</nav:group>
+	<nav:item data-view="/about" data-icon="fa fa-lg fa-fw icon-jj-about-1" nav-title="关于" />
+</navigation>
+<span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>

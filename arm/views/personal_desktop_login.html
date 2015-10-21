@@ -1,0 +1,37 @@
+<div class="frame desktoplogin">
+	<div class="bar top-bar">
+		<a class="btn-arrow-back" ng-show="mode===0" href="#/home" ng-class="{lock : $root.lock_desk}"><i class="icon icon-arm-left"></i></a>
+		<div class="bar-item bar-item-all bar-item-blue bar-item-offset" localize='个人桌面登录'>个人桌面登录</div>
+	</div>
+	<div class="go-panel flex flex-row">
+		<div class="personalForm mypersonalForm">
+			<form class="loginForm" name="loginForm" ng-submit="saveLogin()" novalidate>
+				<div class="form-group icon-arm-user text-center"></div>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon icon-arm-user"></span>
+						<input data-control-autofocus type="text" name="userInput" class="form-control" ng-change="err_mess=''" ng-model="username" maxlength="20" required>
+					</div>
+				</div>
+				<div class="form-group myform-group">
+					<div class="input-group">
+						<span class="input-group-addon icon-arm-password"></span>
+						<input type="password" name="pwdInput" class="form-control" ng-change="err_mess=''" ng-model="password" maxlength="20" required>
+						<input type="password" ng-show="false">
+					</div><a href="#/resetpassword?user={{username}}" localize='修改密码'></a>
+				</div>
+				<div class="checkbox text-right">
+					<label>
+						<input type="checkbox" ng-model="is_remenber" ng-true-value="1" ng-false-value="0"><span class="icon-arm-maximize"></span><span localize='保存密码'></span>
+					</label>
+					<label>
+						<input type="checkbox" ng-model="is_auto" ng-true-value="1" ng-false-value="0"><span class="icon-arm-maximize"></span><span localize='自动登录'></span>
+					</label>
+				</div>
+				<p class="promt">{{err_mess}}</p>
+				<input class="uselessTag" type="submit"/>
+			</form>
+		</div>
+		<a class="btn-arrow-go" ng-class="{lock :$root.lock_desk}" ng-click="saveLogin()"><i class="icon icon-arm-rihgt"></i></a>
+	</div>
+</div>

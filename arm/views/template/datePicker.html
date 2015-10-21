@@ -1,0 +1,20 @@
+<div class="date-picker" >
+	<div class="picker-tool"> 
+		<span class="picker-btn picker-btn-pre" ng-click="updateMonth(-1)"><i class="icon icon-arm-back"></i></span>
+		<div class="tool-group"> 
+			<select class="form-control" ng-model="year" ng-options="year for year in years"></select>
+			<select  class="form-control" ng-model="month" ng-options="month.val as month.name for month in months"></select>
+		</div>
+		<span class="picker-btn picker-btn-next" ng-click="updateMonth(1)"><i class="icon icon-arm-Next"></i></span> 
+	</div> 
+	<div class="picker-main">
+		<ul class="picker-title"> 
+			<li ng-repeat="week in weeks track by $index">{{week}}</li> 
+		</ul> 
+		<ul class="picker-body"> 
+			<li ng-class='{"valid":day,"on":_isOn(day),"checked":_isChecked(day)}' ng-repeat="day in days track by $index">{{day}}</li> 
+		</ul>
+		<div ng-transclude></div>
+	</div> 
+	
+</div>

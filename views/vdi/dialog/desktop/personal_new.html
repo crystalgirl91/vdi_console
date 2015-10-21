@@ -1,0 +1,316 @@
+<div class="modal-header">
+	<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" localize="新增个人桌面">新增个人桌面</h4>
+</div>
+<div class="modal-body">
+	<div role="content"   ng-show="templateNum!=0">
+		<div data-wizard data-last-text="确定添加"
+			class="widget-body fuelux" style="position: relative; padding-bottom: 40px">
+
+			<div class="step-pane step-pane-desk active" data-wizard-step data-name="基本信息">
+				<form name="bodyForm1" ng-class="{is_error:error}" class="form-vertical">
+					<fieldset class="row">
+						<div class="form-item col-xs-6">
+							<label class="form-label required" data-localize="桌面名">桌面名</label>
+							<div class="form-unit">
+								<input class="form-control" type="text" data-ng-model="desktopName" ng-minlength="2" ng-maxlength="20"  localize="LENGTH_LIMIT" param1="2" param2="20" required >
+							</div>
+						</div>
+						<div class="form-item col-xs-6">
+							<label class="form-label" data-localize="宿主机">宿主机</label>
+							<div class="form-unit">
+								<select class="form-control" data-ng-model="pool_ip" data-ng-options="pool_ip.host for pool_ip in pool_ips track by pool_ip.id" ng-change="getMaxInstance(this)">
+									<option value=""localize='系统分配'>系统分配</option>
+								</select>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset class="row">
+						<div class="form-item col-xs-6">
+							<label class="form-label" data-localize="网络">网络</label>
+							<div class="form-unit">
+								<select class="form-control" data-ng-model="network" ng-change="clearBindIP(this)" data-ng-options="network.desc for network in networks track by network.id" required></select>
+							</div>
+						</div>
+						<div class="form-item col-xs-6">
+							<label class="form-label required" data-localize="桌面数">桌面数</label>
+							<div class="form-unit">
+								<input name="number" class="form-control" type="number" min="1" max="{{max_instance}}" placeholder="1 ~ {{max_instance}}" data-ng-model="desktopNum" ng-pattern="/^\s*(\d{1,})\s*$/" required>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset class="row">
+						<div class="form-item col-xs-6">
+							<label class="form-label" data-localize="绑定IP">绑定IP</label>
+							<div class="input-group">
+								<span class="input-group-addon">
+									<span class="checkbox">
+										<label>
+										  <input ng-disabled="!network.dhcp" ng-model="is_bind" type="checkbox" class="checkbox style-0" checked="checked" ng-change="clearBindIP(this)">
+										  <span></span>
+										</label>
+									</span>
+								</span>
+								<select class="form-control" data-ng-model="bindRule" ng-required="is_bind" ng-disabled="!is_bind">
+									<option value="1" data-localize="系统默认"></option>
+									<option value="2" data-localize="自定义"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-item col-sm-6">
+							<label class="form-label" data-localize="加入域">加入域</label>
+							<div class="input-group">
+								<span class="input-group-addon">
+									<span class="checkbox">
+										<label>
+										  <input ng-model="has_domain" type="checkbox" class="checkbox style-0" checked="checked" ng-change="clearDomain(this)">
+										  <span></span>
+										</label>
+									</span>
+								</span>
+								<select class="form-control" data-ng-model="domain" ng-required="has_domain" data-ng-options="domain.name for domain in domains track by domain.id"  ng-disabled="!has_domain">
+								</select>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset class="row">
+						<div class="form-item col-xs-6" ng-if="bindRule==2">
+							<label class="form-label required"  data-localize="起始IP">起始IP</label>
+							<div class="input-group">
+								<input type="text" format-ip ng-model="$parent.start_ip" required>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div class="step-pane step-pane-desk active" data-wizard-step data-name="选择模板">
+				<form name="bodyForm2" ng-class="{is_error:error}">
+					<p localize="请选择一个个人桌面模板类型：">请选择一个个人桌面模板类型：</p>
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="active"><a href="#Window" role="tab" data-toggle="tab">Window</a></li>
+						<li><a href="#Linux" role="tab" data-toggle="tab">Linux</a></li>
+						<li><a href="#else" role="tab" data-toggle="tab" localize="其它">其它</a></li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content  template" data-ng-model="template">
+					  <div class="tab-pane active" id="Window">
+					  		<table class="table table-hover table-condensed">
+								<thead>
+									<tr>
+										<th localize="操作">操作</th>
+										<th localize="模板名">模板</th>
+										<th localize="操作系统">操作系统</th>
+										<th localize="已用/总大小">已用/总大小</th>
+										<th localize="创建者">创建者</th>
+									</tr>
+								</thead>
+								<tbody >
+									<tr data-ng-repeat="item in winTable">
+										<td>
+											<div class="radio">
+												<label>
+													<input ng-value="item.id" ng-model="$parent.image_id" type="radio" name="radio-inline" class="radiobox style-0" required>
+													<span></span> 
+												</label>
+											</div>
+										</td>  
+										<td>{{item.name}}</td>
+										<td>{{item.os_type}}</td>
+										<td>{{item.size_desc}}G/{{item.size_total}}G</td>
+										<td>{{item.owner_desc}}</td>
+									</tr>
+								</tbody>
+							</table>
+					  </div>
+					  <div class="tab-pane" id="Linux">
+					  		<table class="table table-hover table-condensed">
+								<thead>
+									<tr>
+										<th localize="操作">操作</th>
+										<th localize="模板名">模板</th>
+										<th localize="操作系统">操作系统</th>
+										<th localize="已用/总大小">已用/总大小</th>
+										<th localize="创建者">创建者</th>
+									</tr>
+								</thead>
+								<tbody >
+									<tr data-ng-repeat="item in linTable">
+										<td>
+											<div class="radio">
+												<label>
+													<input ng-value="item.id" ng-model="$parent.image_id" type="radio" name="radio-inline" class="radiobox style-0" required>
+													<span></span> 
+												</label>
+											</div>
+										</td>
+										<td>{{item.name}}</td>
+										<td>{{item.os_type}}</td>
+										<td>{{item.size_desc}}G/{{item.size_total}}G</td>
+										<td>{{item.owner_desc}}</td>
+									</tr>
+								</tbody>
+							</table>
+					  </div>
+					  <div class="tab-pane" id="else">
+					  		<table class="table table-hover table-condensed">
+								<thead>
+									<tr>
+										<th localize="操作">操作</th>
+										<th localize="模板名">模板</th>
+										<th localize="操作系统">操作系统</th>
+										<th localize="已用/总大小">已用/总大小</th>
+										<th localize="创建者">创建者</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr data-ng-repeat="item in otherTable">
+										<td>
+											<div class="radio">
+												<label>
+													<input ng-value="item.id" ng-model="$parent.image_id" type="radio" name="radio-inline" class="radiobox style-0" required>
+													<span></span> 
+												</label>
+											</div>
+										</td>
+										<td>{{item.name}}</td>
+										<td>{{item.os_type}}</td>
+										<td>{{item.size_desc}}G/{{item.size_total}}G</td>
+										<td>{{item.owner_desc}}</td>
+									</tr>
+								</tbody>
+							</table>
+					  </div>
+					</div>
+				</form>
+			</div>
+			<div class="step-pane step-pane-desk active" data-wizard-step data-name="配置虚拟硬件">
+				<form name="bodyForm3" ng-class="{is_error:error}">
+					<div class="form-group">
+						<label class="col-xs-2 control-label"  localize="硬件模板">硬件模板</label>
+						<div class="col-xs-8">
+							<select class="form-control" data-ng-model="hardware" data-ng-options="hardware.name for hardware in hardwareList track by hardware.id" required>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 control-label" localize="处理器">处理器</label>
+						<div class="btn-group col-xs-8">
+					        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="1">1<span localize='核'>核</span></label>
+					        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="2">2<span localize='核'>核</span></label>
+					        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="4">4<span localize='核'>核</span></label>
+					        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="8">8<span localize='核'>核</span></label>
+					         <div class="input-group my_input_group">
+						      <input class="form-control" type="text"
+									required
+									data-ng-model="hardware.cpu_num"
+									data-ng-pattern="/^\s*[1-8]\s*$/"
+									data-ng-trim="false"
+						      >
+						      <span></span>
+						      <div class="input-group-addon"><span localize='核'>核</span></div>
+						    </div>
+				    	</div>
+				    	<label class="col-xs-2 note hardwarenote">1-8<span localize='核'>核</span></label>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 control-label" localize="内存">内存</label>
+						<div class="btn-group col-xs-8">
+					        <label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="1">1GB</label>
+					        <label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="1.5">1.5GB</label>
+				    		<label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="2">2GB</label>
+					        <label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="2.5">2.5GB</label>
+					        <div class="input-group my_input_group">
+						      <input class="form-control" type="text"
+									required
+									data-ng-model="hardware.memory_mb"
+									data-ng-pattern="/^\s*([1-8]|1.5|2.5|3.5|4.5|5.5|6.5|7.5)\s*$/"
+									data-ng-trim="false"
+						      >
+						      <span></span>
+						      <div class="input-group-addon">GB</div>
+						    </div>
+				    	</div>
+				    	<label class="col-xs-2 note hardwarenote">1-8GB</label>
+				    </div>
+					<div class="form-group">
+						<label class="col-xs-2 control-label" localize="数据盘">数据盘</label>
+						<div class="col-xs-8">
+							<div class="btn-group" style="width:100%;">
+						        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="10">10GB</label>
+						        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="20">20GB</label>
+						        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="30">30GB</label>
+						        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="40">40GB</label>
+							    <div class="input-group my_input_group">
+							      <input class="form-control" type="number" max="500" min="0" data-ng-model="hardware.local_gb" required>
+							      <span></span>
+							      <div class="input-group-addon">GB</div>
+							    </div>
+							</div>
+						</div>
+						<label class="col-xs-2 note hardwarenote">0-500GB</label>
+					</div>
+					<div class="form-group" ng-show="hardware.local_gb">
+						<label class="col-xs-2 control-label" localize="数据盘格式">数据盘格式</label>
+						<div class="col-xs-8">
+							<label class="radio radio-inline">
+								<input type="radio" class="radiobox" value="raw" ng-model="diskmode" name="diskmode">
+								<span localize="高速模式">高速模式(raw)</span>
+							</label>
+							<label class="radio radio-inline">
+								<input type="radio" class="radiobox" value="qcow2" ng-model="diskmode" name="diskmode">
+								<span localize="兼容模式">兼容模式(qcow2)</span>
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-offset-2 col-xs-9">
+							<label class="checkbox-inline">
+								<input type="checkbox" class="checkbox style-0" ng-model="usb_redir">
+								<span localize="USB">USB</span>
+							</label>
+						</div>
+					</div>
+				</form>	
+			   
+			</div>
+			<div class="step-pane step-pane-desk active" data-wizard-step data-name="绑定用户">
+				<form name="bodyForm4" ng-class="{is_error:error}">
+					<div class="form-group">
+						<label class="col-xs-2 control-label" localize="绑定规则">绑定规则</label>
+						<div class="col-xs-10">
+							<div class="radio">
+								<label>
+									<input type="radio" class="radiobox style-0" value="0" checked="checked" name="style-0" ng-model="rule">
+									<span localize="完全匹配">完全匹配</span> <span class="explain" localize="MESS_NEWPERSON3">--选择的用户数和要创建的桌面数必须相等，一个用户对应一个桌面</span>
+								</label>
+							</div>
+							<div class="radio">
+								<label>
+									<input type="radio" class="radiobox style-0" value="1" name="style-0" ng-model="rule">
+									<span localize="循环匹配">循环匹配</span> <span class="explain" localize="MESS_NEWPERSON4">--选择的用户数小于或等于要创建的桌面数，一个用户可对应多个桌面</span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 control-label" localize="选择用户">选择用户</label>
+						<div class="col-xs-10" data-ui-menu-list data-menu-list-data="select_users"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- end widget content -->
+	</div>
+	<!-- end widget div -->
+	<div ng-if="templateNum==0">
+		<div localize='MESS_NEWDESKTOP2'>不存在可用的个人模板！</div>
+		<footer class="text-right" >
+			<a type="button" class="btn btn-primary" localize="查看模板" href="#/template/personal">
+				查看模板
+			</a>
+			<button type="button" class="btn btn-default" ng-click="close()" localize="取消">
+				取消
+			</button>
+		</footer>
+	</div>
+</div>

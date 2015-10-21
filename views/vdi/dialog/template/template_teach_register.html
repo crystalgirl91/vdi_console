@@ -1,0 +1,68 @@
+<div class="modal-header">
+	<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" localize="模板注册"></h4>
+</div>
+<div class="modal-body">
+	<form class="form-horizontal ng-pristine ng-valid" name="registerTemplate" novalidate>
+		<div class="form-group ">
+			<label class="col-xs-3 control-label" for="select-1" data-localize="选择模板" required></label>
+			<div class="col-xs-6">
+				<select class="form-control" ng-model="templ" data-ng-options="templ for templ in templs">
+					<option value="" localize="--请选择--"> --请选择-- </option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label required" data-localize="模板名"></label>
+			<div class="col-xs-6">
+				<input class="form-control"
+					type="text"
+					name="name"
+					required
+					data-ng-model="name"
+					data-ng-minlength="{{ min_namelength }}"
+					data-ng-maxlength="{{ max_namelength }}"
+					data-ng-trim="false"
+				>
+			</div>
+			<label class="col-xs-3 note" data-localize="LENGTH_LIMIT" param1="{{min_namelength}}" param2="{{max_namelength}}"></label>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label required" localize="模板类型">模板类型</label>
+			<div class="col-xs-9">
+				<label class="radio radio-inline">
+					<input type="radio" class="radiobox" name="style-0a" ng-model="type" value="1" required>
+					<span localize="教学模板">教学模板</span> 	
+				</label>
+				<label class="radio radio-inline">
+					<input type="radio" class="radiobox" name="style-0a" ng-model="type" value="2">
+					<span localize="个人模板">个人模板</span>
+				</label>
+			</div>
+		</div>
+		<div class="form-group ">
+			<label class="col-xs-3 control-label" for="select-1" data-localize="操作系统"></label>
+			<div class="col-xs-6">
+				<select class="form-control" ng-model="os_type" data-ng-options="os_type.value for os_type in os_types track by os_type.key"></select>
+			</div>
+		</div>
+		<div class="form-group ">
+			<label class="col-xs-3 control-label" for="select-1" data-localize="所有人"></label>
+			<div class="col-xs-6">
+				<select class="form-control" ng-model="owner" data-ng-options="owner.name for owner in users track by owner.id"></select>
+			</div>
+		</div>
+
+	</form>
+	<footer class="text-right">
+		<span data-ng-if="templs.length == 0" style="margin-right:10px;" data-localize="无可注册模板"></span>
+		<img data-ng-if="temCopy" src="./img/building.gif" width="24px">
+		<button ng-if="!submiting && !afterSubmiting" type="submit" name="submit" class="btn btn-primary" ng-class="{disabled:registerTemplate.$invalid || !templ || templs.length == 0}" ng-click="ok()" localize="确定">
+			确定
+		</button>
+		<button type="button" class="btn btn-default" ng-click="close()" localize="取消" ng-if="!submiting && !afterSubmiting">
+			取消
+		</button>
+		<img src="img/loadingtext.gif" alt="" ng-if="submiting" class="loadingtext" style="width:24px;height:24px;"> 
+	</footer>
+</div>

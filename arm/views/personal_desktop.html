@@ -1,0 +1,31 @@
+<div class="frame desktop">
+  <div class="bar top-bar">
+    <a class="btn-arrow-back" ng-click="goback()"  ng-class="{lock : $root.lock_desk}"><i class="icon icon-arm-left"></i></a>
+    <div class="bar-item bar-item-all bar-item-blue" localize="请选择个人桌面">请选择个人桌面</div>
+  </div>
+
+  <div class="loadingcontainer" data-ng-if="loading" data-ng-class="{loadComplate: !loading}">
+    <div class="item top"></div>
+    <div class="item right"></div>
+    <div class="item bottom"></div>
+    <div class="item left"></div>
+  </div>
+
+  <div class="holder" mycarousel>
+    <ul class="list_container">
+      <li class="scene-item" data-ng-repeat="item in vms track by item.id" ng-class="{lock : $root.lock_desk}">
+      <div ng-click="connect(item)">
+        <img ng-src="img/{{ item.image.icon || 'win7.png' }}">
+        <p>
+          <span class="name">{{ item.display_name }}</span><br>
+          <span class="type">{{ item.image.os_type }}</span>&nbsp;&nbsp;
+          <!-- <span data-ng-if="item.is_restore" localize='每次还原'></span> -->
+          <!-- <span data-ng-if="!item.is_restore" localize='每次不还原'></span> -->
+        </p>
+      </div>
+      </li>
+    </ul> 
+  </div>
+  <p class="promt">{{last_time}}<span ng-show="last_time" localize="自动进入桌面">秒后自动进入桌面</span>{{err_mess}}</p>
+</div>
+

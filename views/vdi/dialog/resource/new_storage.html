@@ -1,0 +1,157 @@
+<div class="modal-body padding-10">
+	<form class="form-horizontal" name="addStorageForm"  novalidate>
+		<fieldset>
+			<legend><header><span localize="新增存储">新增存储</span><button type="button" class="close" ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button></header></legend>
+			
+			<div class="form-group" data-ng-class="{'has-error':addStorageForm.name.$error.minlength}">
+				<label class="col-xs-3 control-label required" localize="名称">名称</label>
+				<div class="col-xs-5">
+					<input class="form-control" type="text" name="name" ng-minlength="4" minlength="4" maxlength="15" ng-model="storage.name" ng-pattern="/^\s*\w*\s*$/" required ng-trim="false">
+				</div>
+				<label class="col-xs-4 note" localize="MESS_NEWSTORAGE">名称至少4位数字或字母的组合</label>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label" localize="使用者">使用者</label>
+				<div class="col-xs-5">
+					<select class="form-control" data-ng-model="storage.server" data-ng-options="server_label(server) for server in servers track by server.id" ng-disabled="loadiscsi || loadlun">
+						<!--<option value="" localize="所有服务器">所有服务器</option>-->
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label" localize="用途">用途</label>
+				<div class="col-xs-5">
+					<select class="form-control" data-ng-model="storage.usage" data-ng-options="usage.name for usage in usages track by usage.id">
+					</select>
+				</div>
+			</div>
+            <legend></legend>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label " localize="存储类型">存储类型</label>
+				<div class="col-xs-5">
+					<select class="form-control" data-ng-model="storage.type" data-ng-options="type.id for type in types track by type.id" ng-disabled="loadlun || loadiscsi">
+					</select> 
+				</div>
+			</div>
+			<div ng-show="storage.type.id=='iscsi'||storage.type.id=='nfs'" class="form-group" data-ng-class="{'has-error':addStorageForm.server.$error.pattern}" >
+				<label class="col-xs-3 control-label required" localize="所在服务器">所在服务器</label>
+				<div class="col-xs-5">
+					<input format-ip class="form-control"  maxlength="15" type="text" ng-model="storage.host" name="server" ng-required="storage.type.id=='iscsi'||storage.type.id=='nfs'">
+				</div>
+				<label class="col-xs-4 note"  localize="MESS_NEWSTORAGE2">填写服务器IP,如 172.16.10.64 </label>
+			</div>
+			<div ng-show="storage.type.id=='local'||storage.type.id=='nfs'" class="form-group" data-ng-class="{has_success:addStorageForm.path.$valid}" >
+				<label class="col-xs-3 control-label required" localize="路径">路径</label>
+				<div class="col-xs-5">
+					<input class="form-control" name="path" type="text" ng-model="storage.path" max-length="20" ng-required="storage.type.id=='local'||storage.type.id=='nfs'">
+				</div>
+				<label class="col-xs-4 note" localize="存储服务器挂载路径">存储服务器挂载路径</label>
+			</div>
+
+			<div class="form-group"  ng-show="storage.type.id=='iscsi'">
+				<div class="col-xs-5 col-xs-offset-3">
+					<button ng-disabled="loadiscsi || loadlun || loadlv" type="button" ng-class="{disabled:addStorageForm.server.$invalid}" class="btn btn-primary" ng-click="searchISCSI()" localize="搜索"> 搜索</button>
+					<!-- <img ng-show="loadiscsi"  ng-src="img/loadingtext.gif" width="24px" height="24px"/> -->
+				</div>
+
+			</div>	
+			<div class="form-group"  ng-show="storage.type.id=='iscsi' && (iscsi_targets.length || loadiscsi)">
+				<label class="col-xs-3 control-label ">ISCSI Target</label>
+				<div class="col-xs-6">
+					<select class="form-control" ng-disabled="loadlun"  data-ng-options="iscsi_target for iscsi_target in iscsi_targets" ng-model="storage.iscsi_target" ng-required="storage.type.id=='iscsi'">
+						<option value="" localize="--请选择--"> --请选择-- </option>
+                    </select>
+				</div>
+                <label class="col-xs-1"><img ng-show="loadiscsi"  ng-src="img/loadingtext.gif" width="24px" height="24px"/></label>
+			</div>
+			<div ng-show="storage.iscsi_target || storage.type.id=='fc'">
+				<div class="form-group" ng-show="((luns.length || loadlun) && storage.type.id=='iscsi')||storage.type.id=='fc'">
+					<label class="col-xs-3 control-label"  ng-show="storage.type.id=='iscsi'">ISCSI Lun</label>
+	                <label class="col-xs-3 control-label"  ng-show="storage.type.id=='fc'">FC Lun</label>
+					<div class="col-xs-6">
+						<select class="form-control"  data-ng-options="lun.value for lun in luns | lun_name" ng-model="storage.lun" ng-disabled="loadlun"  ng-required="storage.type.id=='iscsi' || storage.type.id=='fc'">
+							<option value="" localize="--请选择--"> --请选择-- </option>
+						</select>
+					</div>
+	                <label class="col-xs-1"><img ng-show="loadlun" ng-src="img/loadingtext.gif" width="24px" height="24px"/></label>
+				</div>
+	            <!--已选择lun,并且lun上没有逻辑卷-->
+	        	<div ng-show="(storage.type.id=='iscsi'||storage.type.id=='fc')&&storage.lun &&(!lvs||lvs.length<1)">
+					<div class="form-group" >
+						<div class="col-xs-5 col-xs-offset-3" >
+							<label class="checkbox-inline">
+		                		<input type="checkbox" class="checkbox style-0" name="format" ng-model="storage.createlvm" disabled/>
+		                		<span localize="新建逻辑卷">新建逻辑卷 </span>
+		                	</label>
+		                </div>
+					</div>
+	                <div class="form-group"  ng-show="storage.createlvm">
+	                 	<label class="col-xs-3 control-label" localize="格式化">格式化</label>
+	                 	 <div class="col-xs-5" >
+		                 	<select class="form-control"  name="format_type" data-ng-model="storage.format_type">
+	                            <option value="ext3">ext3</option>
+	                            <option value="ext4">ext4</option>
+	                            <option value="xfs">xfs</option>
+	                        </select>
+	                    </div>
+	                </div>
+	            </div>
+
+	            <!--如果lun上面已经有逻辑卷,则显示逻辑卷列表-->
+	            <div ng-show="(storage.type.id=='iscsi'||storage.type.id=='fc')&&storage.lun &&(!lun_in_use && lvs && lvs.length > 0)">
+	            	<div class="form-group" ng-show="(storage.type.id=='iscsi'||storage.type.id=='fc')&&storage.lun &&(!lun_in_use && lvs && lvs.length > 0)">
+	                    <label class="col-xs-3 control-label" localize="逻辑卷">逻辑卷</label>
+	                    <div class="col-xs-6">
+	                        <select class="form-control"  data-ng-options="lv.lv for lv in lvs" ng-model="storage.lv" ng-disabled="storage.createlvm">
+	                        </select>
+	                    </div>
+	                    <label class="col-xs-1"><img ng-show="loadlv" ng-src="img/loadingtext.gif" width="24px" height="24px"/></label>
+	                </div>
+					<div class="form-group" >
+						<div class="col-xs-5 col-xs-offset-3" >
+							<label class="checkbox-inline">
+		                		<input type="checkbox" class="checkbox style-0" name="format" ng-model="storage.createlvm" ng-disabled="getCloud(lvs)"/>
+		                		<span localize="新建逻辑卷 ">新建逻辑卷 </span>
+		                	</label>
+		                </div>
+					</div>	
+	            	
+	                <div class="form-group">
+	            		<div class="col-xs-3 col-xs-offset-3">
+		                 	<label class="checkbox-inline">
+	                    		<input type="checkbox" class="checkbox style-0" name="format" ng-model="storage.format" ng-disabled="storage.createlvm"/>
+	                    		<span localize="格式化" >格式化</span></label>
+	                    </div>
+	                    <div class="col-xs-3">
+	                    	<select name="format_type" class="form-control" data-ng-disabled="!storage.format" data-ng-model="storage.format_type">
+	                            <option value="ext3">ext3</option>
+	                            <option value="ext4">ext4</option>
+	                            <option value="xfs">xfs</option>
+	                    	</select>
+	                    </div>
+	                </div>
+	                
+	            </div>
+
+	            <div class="form-group" ng-show="storage.type.id=='iscsi'||storage.type.id=='fc'">
+	                <div class="col-xs-9 col-xs-offset-3">
+	                	<!-- 已经被使用提示信息 -->
+	                    <div ng-show="lun_in_use" style="color: darkred" localize="STORAGE_MESS" 
+	                    	param1="{{storage.lun.value}}"
+	                    	param2="{{lun_in_host.name}}"
+	                    	param3="{{lun_in_host.ip}}">
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+
+			<div class="col-md-12 text-right padding-10">
+					<button ng-show="!submiting" class="btn btn-primary" ng-class="{disabled:addStorageForm.$invalid || lun_in_use}" type="button" ng-click="ok()" localize=" 确定"> 确定</button>
+					<button ng-show="!submiting" class="btn btn-default" ng-click="close()"  localize="取消" type="button"> 取消</button>
+	                <img ng-show="submiting" src="img/loadingtext.gif" width="32px" height="32px"/>
+				</div>
+		</fieldset>
+	</form>
+</div>

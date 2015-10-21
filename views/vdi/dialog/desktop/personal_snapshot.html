@@ -1,0 +1,39 @@
+<div class="modal-header">
+	<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span></button>
+	<h4 class="modal-title" localize="快照管理">快照管理</h4>
+</div>
+<div class="modal-body">
+	<form action="" class="form-horizontal table-form" name="snapShotForm" novalidate>
+		<div class="margin-bottom-10 clearfix">
+			<div class="col-xs-7 nopadding">
+				<p class="note nomargin" ><span localize="MESS_SNAPSHOT">1.快照暂时不支持usb 重定向</span><br><span localize="MESS_SNAPSHOT2"> 2.新增快照需要虚拟机处于启动状态</span></p> 
+			</div>
+			<div class="col-xs-5 text-right nopadding">
+				<a class="btn btn-primary btn-sm " ng-disabled="currentItem.status!== 'running' || currentItem.usb_redir==true" data-ng-click="addNew()" href="javascript:void(0);"><i class="fa  icon-jj-addddd"></i>&nbsp;<span localize="新增快照">新增快照</span></a>
+			</div>
+		</div>
+		<table cellspacing="0" cellpadding="0" border="0" role="grid"  class="ui-jqgrid-btable table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th localize="快照名">快照名</th>
+					<th localize="快照描述">快照描述</th>
+					<th localize="创建时间">创建时间</th>
+					<th localize="操作">操作</th>
+				</tr>
+			</thead>	
+			<tbody>
+				<tr data-ng-repeat="item in rows"  data-ng-class="{read_tr:!item.status}">
+					<td><input type="text" ng-model="item.name" class="small snapdisabled" localize="系统自动生成！" disabled required></td>
+					<td><input type="text" ng-model="item.display_description" class="small" data-ng-readonly="!item.status" maxlength="15" name="name" required></td>
+					<td>{{item.created_at | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+					<td class="nowrap">
+						<button class="btn btn-xs btn-default" ng-if="!item.status" ng-click="restore()" localize-title="恢复"><i class="fa icon-jj-Recovery"></i></button>
+						<button class="btn btn-xs btn-default" ng-if="!item.status" ng-click="delete(item)"  localize-title="删除"><i class="fa fa-trash-o"></i></button>
+						<button class="btn btn-xs btn-default" ng-disabled="snapShotForm.name.$invalid" ng-click="save($index)" ng-if="item.status" localize-title="保存"><i class="fa fa-save"></i></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<p class="note"></p>
+	</form>
+</div>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+<title></title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="fonts/opensans/fonts.css">
+<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+<style>
+html,body{
+	background:none;
+	height:100%;
+	width:100%;
+	overflow:hidden;
+}
+html{
+	background:url(img/skin0/login_background_2.jpg) center center;
+}
+body{
+
+	position:relative;
+}
+.login_wrapper{
+	width:600px;
+	height:255px;
+	position:absolute;
+	margin:auto;
+	top:0px;
+	right:0px;
+	left:0px;
+	bottom:0px;
+}
+.login_logo{
+	height:55px;
+	margin-top:2px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:20px;
+    text-align:center;
+}
+.login_logo.login_logo_cn{
+	width:316px;
+	background:url(img/skin0/login_masker.png) no-repeat;
+}
+.login_logo.login_logo_en{
+	width:435px;
+	background:url(img/skin0/login_masker_en.png) no-repeat;
+}
+.smart-form{
+    margin-left:50px;
+}
+.smart-form fieldset,
+.smart-form footer{
+	background:none;
+}
+.smart-form footer{
+	border:0 none;
+}
+.copyright{
+	text-align:center;
+	color:#fff;
+    margin-top:40px;
+    margin-left:-23px;
+}
+.copyright p{
+	margin:0;
+}
+.copyright a{
+	color:#fff;
+}
+.smart-form fieldset label.input{
+	display:inline-block;
+	margin:8px;
+}
+.smart-form button{
+	display:inline-block;
+	width:80px;
+	height:32px;
+}
+table.layout td{
+	padding:36px 8px;
+}
+
+.version{
+    margin-left: auto;
+    margin-right: auto;
+    text-align:center;
+    color:#FFFFFF;
+}
+
+.right_bottom{
+    position:fixed;
+    right:0;
+    bottom:0;
+    color:lightgrey;
+    margin-right:15px;
+}
+
+</style>
+</head>
+<body  ng-app="login" ng-controller="loginController">
+<!-- possible classes: minified, no-right-panel, fixed-ribbon, fixed-header, fixed-width-->
+<div class="login_wrapper">
+<!-- 	<p class="login_logo" data-ng-if='current_Lan == "Chinese, Simplified"'><img src="img/skin0/login_masker.png" alt="噢易教育桌面云"></p>
+	<p class="login_logo login_logo_en" data-ng-if='current_Lan == "English"'><img src="img/skin0/login_masker_en.png" alt="Os-easy Cloud Class"></p>
+ -->
+<p class="login_logo " data-ng-if="current_theme =='smart-style-0'"><img ng-src="{{ domain }}/thor/get_image/{{ currentLang.langCode }}login_style0" alt="" /></p>
+<p class="login_logo " data-ng-if="current_theme =='smart-style-1'"><img ng-src="{{ domain }}/thor/get_image/{{ currentLang.langCode }}login_style1" alt="" /></p>
+
+	<form id="login-form" class="smart-form" novalidate>
+		<table class="layout">
+			<tr>
+				<td>
+					<label class="input"> <i class="icon-append fa fa-user"></i>
+						<input type="text" name="username" maxlength="20" required>
+						<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> <span localize="用户名">用户名</span></b></label>
+				</td>
+				<td>
+					<label class="input"> <i class="icon-append fa fa-lock"></i>
+						<input type="password" maxlength="20" name="password" required>
+						<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> <span localize="密码">密码</span></b> </label>
+			<!--div class="note"><a href="forgotpassword.html">Forgot password?</a></div-->
+				</td>
+				<td>
+					<button type="submit" class="btn btn-primary" localize="登录"></button>
+				</td>
+			</tr>
+		</table>
+	</form>
+    <!--<div class="version">Version 4.0</div>-->
+	<div class="copyright">
+		<!--<p>版权所有：武汉噢易云计算有限公司</p>-->
+
+        <p localize="噢易云计算"></p>
+		<p data-ng-if="langversion != 'korean' && langversion != 'dev_fan'"><a href="http://www.os-easy.com" target="_blank">WWW.OS-EASY.COM</a></p>
+		<p data-ng-if="langversion == 'korean'"><a href="http://www.s2network.co.kr" target="_blank">WWW.S2NETWORK.CO.KR</a></p>
+		<p data-ng-if="langversion == 'dev_fan'"><a href="http://www.acctc.com.tw" target="_blank">WWW.ACCTC.COM.TW</a></p>
+	</div>
+</div>
+<div class="right_bottom">Ver {{version}}</div>
+
+<script src="js/vdi/config.js"></script>
+<script src="js/vdi/dev_config.js"></script>
+<script src="js/vdi/oem.js"></script>
+<script src="js/libs/jquery-2.1.1.js"></script>
+<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
+<script src="js/bootstrap/bootstrap.min.js"></script>
+<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+<script src="js/notification/SmartNotification.min.js"></script>
+
+<script src="js/libs/angular/angular.js"></script>
+<script src="js/ng/ng.directives.js"></script>
+<script src="js/ng/ng.controllers.js"></script>
+<script src="js/libs/angular/angular-resource.js"></script>
+<script src="js/libs/angular/i18n/angular-locale_zh.js"></script>
+<script src="js/libs/angular/ui-bootstrap-custom-tpls-0.11.0.js"></script>
+<script src="js/vdi/resource.js"></script>
+
+<!--[if IE 8]>
+
+<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+<![endif]-->
+
+<script>
+
+angular.module('login', ["ngResource","vdi.resource","app.localize","app.controllers"])
+.controller("loginController", ["$scope", "loginResource", "localize", "init","settings",function($scope,loginresource,localize,init,settings){
+            $scope.domain = $Domain;
+            $scope.langversion = $$$version;
+            loginresource.query(function(res){
+                $scope.version = res.version;
+            });
+            $scope.current_theme = localStorage.current_theme || "smart-style-0";
+            $scope.getCurrLang = function(){
+            	$scope.currentLang = settings.languages.filter(function(l) {
+        			return l.langCode === localStorage.i18n_code;
+        		})[0];
+            }
+            if(localStorage.i18n_code){
+            	$scope.getCurrLang();
+            	localize.setLang($scope.currentLang  );
+            }else{
+            	init.get_language(function(res){
+            		localStorage.i18n_code = (res.language==="production" ? "production" : "develop");
+            		$scope.getCurrLang();
+            		localize.setLang($scope.currentLang );
+            	});
+            }
+            
+}]);
+document.title = $$$I18N.get("TITLE_NAME")
+if(localStorage.current_theme){
+	$("body").addClass(localStorage.current_theme);
+}
+else {
+	$("body").addClass(localStorage.current_theme);
+}
+$("#login-form").on("submit", function(e){
+	e.preventDefault();
+	if(this.username.value && this.password.value){
+		$.ajax($Domain + "/login", {
+			method: "POST",
+			data: JSON.stringify({
+				username: this.username.value,
+				password: this.password.value
+			}),
+			xhrFields: {
+				withCredentials: true
+			},
+			crossDomain: true
+		}).promise().then(
+			function(res){
+				if(res.code === 0){
+					localStorage.loginInfo = JSON.stringify(res.user);
+					var powers = "Summary,Resource,Host,Network,Storage,Desktop,Teaching_desktop,Personal_desktop,Template,Teaching_template,Personal_template,Hardware_template,Terminal,Classroom,Terminal_Manage,User,Role_Manage,Administrator,Common_user,Domain_user,Monitor,Host_monitoring,Desktop_monitoring,Alarm_information,Timetable,Course_list,System,System_backup,System_ISO,USB_redirection,System_upgrade,Operation_log,About";
+					localStorage["power"] = res.user.keys || powers;
+					location.replace(localStorage.returnUrl || "index.html");
+				}
+				else{
+					$.bigBox({
+						title : $$$MSG.get("PAI_CODE") + res.code,
+						content : $$$MSG.get(res.code),
+						color : "#C46A69",
+						icon : "fa fa-warning shake animated",
+						timeout : 6000
+					});
+				}
+			},
+			function(err){
+
+			}
+		);
+	}else if(!this.username.value){
+		this.username.focus();
+	}else{
+		this.password.focus();
+	}
+});
+
+</script>
+</body>
+</html>

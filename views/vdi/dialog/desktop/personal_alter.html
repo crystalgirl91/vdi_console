@@ -1,0 +1,135 @@
+<div class="modal-header">
+	<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" localize="修改桌面">修改桌面</h4>
+</div>
+<div class="modal-body">
+	<form class="form-horizontal ng-pristine ng-valid" name="editPersonalForm" action=""> 
+		<fieldset>
+			<div class="form-group">
+				<label class="col-xs-2 control-label" localize="桌面名">桌面</label>
+				<div class="col-xs-10"> 
+					<input class="form-control" ng-model="display_name" localize="LENGTH_LIMIT" param1="2" param2="20" type="text" ng-maxlength="20" ng-minlength="2" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label" localize="关联用户">关联用户</label>
+				<div class="col-xs-10">
+					<select class="form-control" ng-model="user" data-ng-options="user.name group by user.role_desc for user in users" required>
+					</select> 
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label" localize="网络">网络</label>
+				<div class="col-xs-10">
+					<select class="form-control" ng-model="$parent.network" data-ng-options="name(network) for network in networks track by network.id" required>
+					</select> 
+				</div>
+			</div>
+			<div class="form-group" ng-if="ip_able">
+				<label class="col-xs-2 control-label" localize="设置静态IP">设置静态IP</label>
+				<div class="col-xs-10">
+					<select class="form-control" ng-model="$parent.$parent.IP" data-ng-options="IP for IP in IPs" >
+						<option value="" localize="不分配">不分配</option>
+					</select> 
+				</div>
+				
+			</div>
+			<div class="form-group">
+					<label class="col-xs-2 control-label" localize="处理器">处理器</label>
+					<div class="btn-group col-xs-8">
+				        <label class="btn btn-default" data-ng-model="cpu_num" btn-radio="1">1 <span localize='核'></span></label>
+				        <label class="btn btn-default" data-ng-model="cpu_num" btn-radio="2">2<span localize='核'></span></label>
+				        <label class="btn btn-default" data-ng-model="cpu_num" btn-radio="4">4<span localize='核'></span></label>
+				        <label class="btn btn-default" data-ng-model="cpu_num" btn-radio="8">8<span localize='核'></span></label>
+						<!-- <span localize="核"> 核</span>< -->
+				         <div class="input-group my_input_group">
+					      <input class="form-control" type="text"
+								required
+								data-ng-model="cpu_num"
+								data-ng-pattern="/^\s*[1-8]\s*$/"
+								data-ng-trim="false"
+					      >
+					      <span></span>
+					      <div class="input-group-addon" localize='核'>核</div>
+					    </div>
+			    	</div>
+			    	<label class="col-xs-2 note hardwarenote">1-8<span localize='核'></span></label>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label" localize="内存">内存</label>
+				<div class="btn-group col-xs-8">
+			        <label class="btn btn-default" data-ng-model="memory_mb" btn-radio="1">1GB</label>
+			        <label class="btn btn-default" data-ng-model="memory_mb" btn-radio="1.5">1.5GB</label>
+		    		<label class="btn btn-default" data-ng-model="memory_mb" btn-radio="2">2GB</label>
+			        <label class="btn btn-default" data-ng-model="memory_mb" btn-radio="2.5">2.5GB</label>
+			        <div class="input-group my_input_group">
+				      <input class="form-control" type="text"
+							required
+							data-ng-model="memory_mb"
+							data-ng-pattern="/^\s*([1-8]|1.5|2.5|3.5|4.5|5.5|6.5|7.5)\s*$/"
+							data-ng-trim="false"
+				      >
+				      <span></span>
+				      <div class="input-group-addon">GB</div>
+				    </div>
+		    	</div>
+		    	<label class="col-xs-2 note hardwarenote">1-8GB</label>
+		    </div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label" localize="数据盘">数据盘</label>
+				<div class="col-xs-8">
+					<div class="btn-group" style="width:100%;">
+				        <label class="btn btn-default" ng-disabled="min_local_gbs>10" data-ng-model="local_gb" btn-radio="10">10GB</label>
+				        <label class="btn btn-default" ng-disabled="min_local_gbs>20" data-ng-model="local_gb" btn-radio="20">20GB</label>
+				        <label class="btn btn-default" ng-disabled="min_local_gbs>30" data-ng-model="local_gb" btn-radio="30">30GB</label>
+				        <label class="btn btn-default" ng-disabled="min_local_gbs>40" data-ng-model="local_gb" btn-radio="40">40GB</label>
+					    <div class="input-group my_input_group">
+					      <input class="form-control" type="number" min="{{min_local_gbs}}" max="500" data-ng-model="local_gb" required>
+					      <span></span>
+					      <div class="input-group-addon">GB</div>
+					    </div>
+					</div>
+				</div>
+				<label class="col-xs-2 note hardwarenote">{{min_local_gbs}}-500GB</label>
+			</div>
+			<div class="form-group" ng-show="local_gb">
+				<label class="col-xs-2 control-label" localize="数据盘格式">数据盘格式</label>
+				<div class="col-xs-8">
+					<label class="radio radio-inline">
+						<input type="radio" class="radiobox" value="raw" ng-model="diskmode" name="diskmode">
+						<span localize="高速模式">高速模式(raw)</span>
+					</label>
+					<label class="radio radio-inline">
+						<input type="radio" class="radiobox" value="qcow2"  ng-model="diskmode" name="diskmode">
+						<span localize="兼容模式">兼容模式(qcow2)</span>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-10 col-xs-offset-2">
+					<label class="checkbox-inline">
+						  <input type="checkbox" class="checkbox style-0"  data-ng-model="usb_redir">
+						  <span>USB</span>
+					</label>
+					<!-- <label class="checkbox-inline">
+						  <input type="checkbox" class="checkbox style-0" ng-model="need_ha">
+						  <span>HA</span>
+					</label> -->
+				</div>
+			</div>
+			<footer class="text-right">
+				<button type="button" class="btn btn-primary" ng-class="{disabled:editPersonalForm.$invalid}" ng-click="ok()" localize="确定">
+					确定
+				</button>
+				<button type="button" class="btn btn-default" ng-click="close()" localize="取消">
+					取消
+				</button>
+				
+			</footer>
+		</fieldset>
+	</form>
+</div><script type="text/javascript">
+	$(".slider").slider();
+</script>
+

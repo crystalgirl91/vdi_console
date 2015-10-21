@@ -1,0 +1,26 @@
+<div class="sort-dialog" ng-show="!finish">
+	<h3 class="sort-head" localize="终端排序">终端排序</h3>
+	<section class="sort-body">
+		<form class="sortForm" name="sortForm" ng-submit="sortOk()">
+			<div class="control">
+				<label class="radio-box"><input data-control-autofocus type="radio" ng-change="sort_num = null" name="type" ng-model="sort_type" value="0"><span localize="序列号自动加1">序列号自动加1</span></label>
+			</div>
+			<div class="control">
+				<label class="radio-box"><input type="radio" ng-change="sort_num = null" name="type" ng-model="sort_type" value="1"><span localize="手动输入">手动输入</span></label>
+				<input type="text" ng-model="sort_num"  ng-disabled="sort_type==0" ng-required="sort_type==1" ng-pattern="/^\s*\d{1,}\s*$/">
+			</div>
+			<div class="control-btn">
+				<span class="sort_err">{{sort_err}}</span>
+				<button type="submit" localize="确定" ng-disabled="sortForm.$invalid">确定</button>
+			</div>
+		</form>
+	</section>
+</div>
+<div class="sort-dialog" ng-show="finish">
+	<h3 class="sort-head" localize="终端排序">终端排序</h3>
+	<section class="sort-body">
+		<p class="sort-p" localize="序列号配置成功">序列号配置成功，您的序列号为：</p>
+		<div class="sort-num"><i>{{final_id}}</i></div>	
+		<a class="sort-a" ng-click="clearData()" localize="重新配置序列号">＜重新配置序列号</a>
+	</section>
+</div>

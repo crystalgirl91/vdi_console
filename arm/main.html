@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html data-ng-app="armApp" lang="zh">
+<head>
+<meta charset="utf-8">
+<title> OS-EASY-ARM </title>
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style type="text/css">
+	#reloadButton{
+		position: absolute;
+		right: 0px;
+		bottom: 0px;
+		color: #fff;
+		opacity: 0.6;
+		background-color: #004a8b;
+		border:0px;
+		padding: 5px 10px;
+	}
+</style>
+<script>$VERSION = window.global && window.global.$CONFIG && window.global.$CONFIG.$VERSION ? window.global.$CONFIG.$VERSION : Math.random();</script>
+<script>(function(ver){
+var csss = [
+"css/bootstrap.min.css",
+"fonts/opensans/fonts.css",
+"css/font-arm.css",
+"css/arm.css",
+"css/directive.css"
+];
+document.write(csss.map(function(css){
+	return "<link rel='stylesheet' href='"+ css + ver + "'>";
+}).join(""));
+})("?" + $VERSION)</script>
+</head>
+<body>
+<div class="main" data-ng-controller="mainController">
+		<div class="arm-page"  id="center">
+			<div class="arm-logo">
+				<img ng-src="{{ domain }}/thor/get_image/productionarmLogo">
+			</div>
+			<div class="grid view-animate" ng-view=""></div>
+			<div id="footer" ng-controller="footerController" ng-include="'views/template/footer.html'"></div>
+		</div>
+
+		<div class="fixer" ng-if="is_sort" ng-include="'views/sort_client.html'" ng-controller="sortClientController"></div>
+</div>
+<!-- <textarea style="position:fixed;left: 0px;;top: 0px;width:100%;min-height: 40%" class="log_area">{{log_data}}</textarea> -->
+<button id="reloadButton" onclick="location.reload()" data-ng-hide="is_run">刷  新</button>
+<script>(function(ver){
+var jss = [
+"js/jquery/jquery-2.1.1.min.js",
+"js/angular/angular.js",
+"js/angular/angular-resource.js",
+"js/angular/angular-route.js",
+"js/angular/angular-animate.js",
+"js/angular/ui-bootstrap-tpls.js",
+"js/config.js",
+"js/oem.js",
+"js/app.js",
+"js/controllers.js",
+"js/directives.js",
+"js/resource.js"
+];
+document.write(jss.map(function(js){
+	return "<script src='"+ js + ver + "'><\/script>";
+}).join(""));
+})("?" + $VERSION)</script>
+<script type="text/javascript">
+	function initSize(){
+		var ratio = 1.7, alone_ratio = 2.3;
+		var pos = document.getElementById("center");
+		var win_ratio = Number( (document.documentElement.clientWidth / document.documentElement.clientHeight).toFixed(2) );
+		// if(win_ratio > ratio){
+		// 	pos.style.height = "44%";
+		// 	pos.style.width = pos.clientHeight * alone_ratio + "px";
+		// }else{
+		// 	pos.style.width = "66%";
+		// 	pos.style.height = pos.clientWidth / alone_ratio + "px";
+		// }
+		pos.style.height = "44%";
+		pos.style.width = pos.clientHeight * alone_ratio + "px";
+	}
+	initSize();
+</script>
+</body>
+</html>

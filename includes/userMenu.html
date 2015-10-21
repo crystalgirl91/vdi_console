@@ -1,0 +1,41 @@
+<section class="dir-user-menu">
+<div>
+	<div class="col-xs-5 control-label text-center">
+		<label class="text-center" localize="从下表选择一个或多个用户">从下表选择一个或多个用户</label>
+	</div>
+	<div class="col-xs-2">&nbsp;</div>
+	<div class="col-xs-5 control-label text-center">
+		<label class="text-center" localize="已选择用户">已选择用户</label>
+	</div>
+</div>
+
+<div class="user-menus">
+	<div class="col-xs-5 menus">
+		<ul class="menu menu-tree" data-ng-repeat="item in _users track by $index">
+			<div class="menu_header" ng-show="item.userData.length">
+				<span class="fa icon-jj"></span>
+				<span>{{item.typeName}}</span>
+				<span class="pull-right  fa icon-jj-add" data-ng-click="add_selected(item.userData)"></span>
+			</div>
+			<div class="menu_body">
+				<li class="menuitem" data-ng-repeat="_user in (item.userData)" ng-click="add_select_rows($event,_user,item.userData)" ng-dblclick="add_selected(_user)">
+					<span class="text-overflow text-overflow-half">{{_user.name}}</span><span class="text-overflow text-overflow-half">{{_user.real_name}}</span>
+				</li>
+			</div>
+		</ul>
+	</div>
+	<div class="col-xs-2 text-center operators">
+		<p><button  ng-disabled="seRows.length===0" ng-click="ltor()" type="button" class="btn btn-default btn-sm"><i class="fa fa-arrow-right"></i></button></p>
+		<p><button  ng-disabled="rmRows.length===0" ng-click="rtol()" type="button" class="btn btn-default btn-sm"><i class="fa fa-arrow-left "></i></button></p>
+	</div>
+	<div class="col-xs-5 menus">
+		<ul class="menu menu-selected">
+			<div class="menu_body">
+				<li class="menuitem" data-ng-repeat="sitem in selected" ng-click="add_remove_rows($event,sitem)" ng-dblclick="remove_selected(sitem)">
+					<span class="text-overflow text-overflow-half">{{sitem.name}}</span><span class="text-overflow text-overflow-half">{{sitem.real_name}}</span>
+				</li>
+			</div>
+		</ul>
+	</div>
+</div>
+</section>

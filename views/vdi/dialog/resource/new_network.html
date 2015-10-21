@@ -1,0 +1,85 @@
+<div class="modal-body padding-10">
+	<form class="form-horizontal ng-pristine ng-valid" name="addStorageForm"  novalidate>
+		<fieldset>
+			<legend>
+				<header>
+					<span ng-if="network.type =='logic'" localize='普通网络'></span>
+					<span ng-if="network.type =='vlan'">{{network.type | network_type}}</span>
+					<button type="button" class="close" ng-click="close()">
+						<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+					</button>
+				</header>
+			</legend>
+           <!--  <div class="alert col-xs-8 col-xs-offset-2" localize="MESS_NEWNET">
+                网络在不启用系统分配情况下将直接使用外部ip分配机制 	</div> -->
+                 <!-- <div ng-show="network.type=='vlan'" class="alert col-xs-8 col-xs-offset-2" localize="MESS_NEWNET2">
+                删除VLAN网络段需重启服务器 	</div> -->
+            <div class="form-group">
+                <label class="col-xs-3 control-label required" localize="名称">名称</label>
+                <div class="col-xs-7">
+                    <input class="form-control"  type="text" maxlength="20" data-ng-model="network.name" required ng-disabled="update">
+                </div>
+                <!--<label class="col-xs-4"><input type="checkbox" ng-model="network.snoopcast" />开启组播抑制</label>-->
+            </div>
+            <div class="form-group" ng-show="network.type!='nat'">
+                <label class="col-xs-3 control-label" localize="是否启用系统分配">DHCP</label>
+                <div class="col-xs-7">
+                	<label class="checkbox-inline">
+						<input type="checkbox" class="checkbox style-0" ng-disabled="network.type=='logic'" ng-model="network.dhcp">
+						<span></span>
+					</label>
+                </div>
+            </div>
+            <div data-ng-show="network.dhcp">
+				<div class="form-group">
+					<label class="col-xs-3 control-label required" localize="开始IP">开始IP</label>
+					<div class="col-xs-7" >
+						<input type="text" format-ip ng-model="network.dhcp_start" ng-required="network.dhcp">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label required" localize="结束IP">结束IP</label>
+					<div class="col-xs-7">
+						<input type="text" format-ip ng-model="network.dhcp_end" ng-required="network.dhcp">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label required" localize="子网掩码">子网掩码</label>
+					<div class="col-xs-7">
+						<input type="text" format-ip data-ng-model="network.netmask" ng-required="network.dhcp">
+					</div>
+				</div>
+				<div class="form-group" ng-show="network.type!='nat'">
+					<label class="col-xs-3 control-label" localize="网关">网关</label>
+					<div class="col-xs-7">
+						<input type="text" format-ip data-ng-model="network.gateway">
+					</div>
+				</div>
+	            <div class="form-group"  ng-show="network.type!='nat'">
+	                <label class="col-xs-3 control-label">DNS1</label>
+	                <div class="col-xs-7">
+	                	<input type="text" format-ip data-ng-model="network.dns1">
+	                </div>
+	            </div>
+	            <div class="form-group"  ng-show="network.type!='nat'">
+	                <label class="col-xs-3 control-label">DNS2</label>
+	                <div class="col-xs-7">
+	                	<input format-ip type="text" data-ng-model="network.dns2">
+	                </div>
+	            </div>
+            </div>
+			<div class="form-group" data-ng-show="network.type=='vlan'">
+				<label class="col-xs-3 control-label required">VLAN ID</label>
+				<div class="col-xs-2">
+					<input class="form-control" type="text" ng-disabled="update" ng-model="network.vlanid" ng-pattern="/^[1-9](\d){0,3}$/" ng-required="network.type=='vlan'">
+				</div>
+			</div>
+
+			<div class="col-md-12 text-right padding-10">
+				<button class="btn btn-primary" ng-show="!submiting" ng-disabled="!addStorageForm.$valid" type="button" ng-click="ok()" localize="确定"> 确定</button>
+				<button class="btn btn-default" ng-show="!submiting" type="button" ng-click="close()" localize="取消"> 取消</button>
+                <img ng-show="submiting" src="img/loadingtext.gif" width="24px" height="24px"/>
+			</div>
+		</fieldset>
+	</form>
+</div>

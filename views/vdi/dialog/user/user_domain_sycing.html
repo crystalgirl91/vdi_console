@@ -1,0 +1,87 @@
+<section id="widget-grid">
+		<div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	          <h4 class="modal-title" id="mySmallModalLabel" data-localize="自定义同步"></h4>
+	        </div>
+	        <div class="modal-body">
+				<form class="form" name="addUseradminFrom" method="post" ng-submit="addUseradminFrom.$valid"  novalidate>
+					<div class="form-group">
+						<label localize="请选择需要同步的域分组"></label>
+					</div>
+					<div class="row">
+						<label class="col-xs-5" localize="选择分组">选择分组</label>
+						<label class="col-xs-offset-2 col-xs-5" localize="已选分组">已选分组</label>
+					</div>
+					<div class="form-group">
+						<div class="user-menus">
+							<div class="col-xs-5 menus">
+								<div class="text-center">
+									<img ng-src="img/building.gif" data-ng-if="status == 'loading'">
+								</div>
+
+								<div class="menu menu-tree" ng-repeat="firstMenu in temp" data-ng-if="status == 'completed'">
+									<div class="menu_header" ng-click="select_row(firstMenu)" ng-dblclick="select(firstMenu)" ng-class="{itemActive:firstMenu.active}">
+									{{firstMenu.text}}
+									</div>
+									<div ng-if="firstMenu.children.length>0" ng-repeat="secondMenu in firstMenu.children" class="menu_body">
+										<div class="menu_header" ng-if="secondMenu.children.length<1" ng-click="select_row(secondMenu)" ng-dblclick="select(secondMenu)" ng-class="{itemActive:secondMenu.active}">
+										{{secondMenu.text}}
+										</div>
+										<div ng-if="secondMenu.children.length>0">
+											<div class="menu_header" ng-click="select_row(secondMenu)" ng-dblclick="select(secondMenu)">
+											{{secondMenu.text}}
+											</div>
+											<div ng-repeat="thirdMenu in secondMenu.children" class="menu_body" ng-click="select_row(thirdMenu)" ng-dblclick="select(thirdMenu)" ng-class="{itemActive:thirdMenu.active}">
+											<div class="menu_header">{{thirdMenu.text}}</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-xs-2 text-center domain-operators">
+								<button  ng-click="select()"  type="button" class="btn btn-default btn-sm"><i class="fa fa-arrow-right"></i></button>
+							</div>
+							<div class="col-xs-5 menus">
+								<ul class="menu">
+									<div class="menu_body">
+										<li data-ng-dblclick="removeSelected(selected_item)" ng-repeat="selected_item in selected" ng-class="{itemActive:selected_item.active}">
+											{{selected_item.text}}
+											<!-- <span class="pull-right" data-ng-click="removeSelected(selected_item)">&times;</span> -->
+											<span class="pull-right fa icon-jj-Delete" data-ng-click="removeSelected(selected_item)"></span>
+										</li>
+									</div>
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="checkbox-inline">
+							<input type="checkbox" class="checkbox style-0" data-ng-model="data.scope" name="scope">
+							<span localize="包含子目录">包含子目录</span>
+						</label>
+						<!-- <input type="checkbox" 
+						name="scope" 
+						localize="包含子目录" 
+						data-ng-model="data.scope"
+						ng-true-value=1
+						ng-false-value=0
+						class="checkbox style-0" 
+						/>
+						&nbsp;&nbsp;<span data-localize="包含子目录"></span> -->
+					</div>
+					<footer class="text-right">
+				    	<button type="submit" name="button" disabled="disabled" class="btn btn-primary"
+								data-ng-disabled="addUseradminFrom.$invalid"
+								data-ng-click="ok()" data-localize="确定"></button>
+						<button type='button' name="close" class="btn btn-default"
+								data-ng-click="close()" data-localize="取消"></button>
+					</footer>
+				</form>
+	        </div>
+
+      </div>
+
+</section>

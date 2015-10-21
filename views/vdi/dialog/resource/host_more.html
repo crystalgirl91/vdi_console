@@ -1,0 +1,225 @@
+<div class="padding-10">
+	<div class="modal-header">
+		<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span></button>
+		<h4 class="modal-title" localize="高级管理">高级管理</h4>
+    </div>
+<!-- widget content -->
+<div class="form-horizontal table-form" name="hostMoreForm" novalidate>
+	<div class="widget-body">
+		<ul id="myTab1" class="nav nav-tabs bordered">
+			<li class="active">
+				<a href="#s1" data-toggle="tab" localize="服务">服务</a>
+			</li>
+			<li class="">
+				<a href="#s2" data-toggle="tab" localize="网络"> 网络</a>
+			</li>
+			<li class="">
+				<a href="#s3" data-toggle="tab" localize="外网IP"> 外网IP</a>
+			</li>
+			<li class="">
+				<a href="#s4" data-toggle="tab" localize="root密码"> root密码</a>
+			</li>
+			<li class="">
+				<a href="#s5" data-toggle="tab" localize="桌面设置"> 桌面设置</a>
+			</li>
+			<!-- 保留功能不删除 begin-->
+			<!-- <li class="">
+				<a href="#s3" data-toggle="tab">模板</a>
+			</li>
+			<li class="">
+				<a href="#s4" data-toggle="tab"> 硬件</a>
+			</li> -->
+			<!-- 保留功能不删除 end-->
+		</ul>
+		<div class="tab-content padding-10 ">
+			<div class="tab-pane fade active in" id="s1">
+				<table class="table table-hover table-bordered">
+					<thead>
+						<tr>
+							<th localize="服务名称">服务名称</th>
+							<th localize="描述">描述</th>
+							<th localize="开关">开关</th>
+							<th localize="日志">日志</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="item in rows">
+							<td>{{item.name}}</td>
+							<td>{{item.desc}}</td>
+							<td>
+								<span class="switch">
+									<input data-ng-disabled="item.is_run" type="checkbox" name="start_interval" class="switch-checkbox" id="start_interval{{$index}}" ng-model="item.is_run" ng-click="active(item)">
+									<label for="start_interval{{$index}}" class="switch-label" data-swchon-text="ON" data-swchoff-text="OFF">
+									</label>
+								</span>
+							</td>
+							<td>
+								<button class="btn btn-default btn-xs" ng-click="down_log(item)"><i class="fa icon-jj-Download" localize-title="下载日志"></i></button>
+                                <div style="display:none"><a id="logFilePath{{item.name}}" class="btn btn-default btn-xs" href="{{item.log_file}}"></a></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="s2">
+				<div class="text-left">
+				    <span class="help-block padding-10 pull-right"><i class="fa fa-warning"></i><span localize="MESS_REBOOT">网络修改后需重启计算机才能生效</span> </span>
+                </div>
+                <form name="networkForm" novalidate>
+					<table cellspacing="0" cellpadding="0" border="0" role="grid"  class="ui-jqgrid-btable table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th  localize="网卡名称">网卡名称</th>
+								<th  localize="MAC地址">MAC地址</th>
+								<th  localize="网卡">网卡</th>
+								<th  localize="网卡IP">网卡IP</th>
+
+								<th  localize="子网掩码">子网掩码</th>
+								<th  localize="默认网关">默认网关</th>
+                                <th  localize="管理台" ng-show="has_vlan==False">管理台</th>
+								<th ng-show="has_vlan==False"></th>
+							</tr>
+						</thead>	
+						
+						<tbody>
+							<tr data-ng-repeat="item in networks" ng-class="{'read_tr':item.readonly,'edit_tr':!item.readonly}">
+								<td>{{item.name}}</td>
+								<td>{{item.mac}}</td>
+								<td>{{item.speed}}Mb/s</td>
+								<td><input style="width:100px!important" type="text" ng-model="item.ip" data-ng-readonly="item.readonly" class="small" ng-pattern="/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/" ng-required="!item.readonly"></td>
+
+								<td><input style="width:100px!important" type="text" ng-model="item.netmask" data-ng-readonly="item.readonly"  class="small" ng-pattern="/^(254|252|248|240|224|192|128|0)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/ " ng-required="!item.readonly"></td>
+
+								<td><input style="width:100px!important" type="text" ng-model="item.gateway" data-ng-readonly="item.readonly"  class="small" ng-pattern="/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/"></td>
+
+								<td ng-show="has_vlan==False"><div><input style="width:100px!important" type="text" ng-model="item.console_ip" data-ng-readonly="item.readonly"  class="small" ng-pattern="/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/"></div></td>
+								<td ng-show="has_vlan==False">
+									<div ng-show="item.editable">
+										<img src="img/loadingtext.gif" style="width:24px;height:24px;" ng-show="item.submiting">
+										<button localize-title='编辑' class="btn btn-xs btn-default" ng-show="item.readonly && !item.submiting"  ng-click="edit(item)"><i class="fa icon-jj-Write"></i></button>
+										<button localize-title='保存' class="btn btn-xs btn-default" ng-show="!item.readonly && !item.submiting" ng-disabled="networkForm.$invalid" ng-click="ok(item)"><i class="fa icon-jj-Preservation"></i></button>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</div>
+			<div class="tab-pane fade" id="s3">
+				<form class="padding-20  form-horizontal " name="outerIPForm" novalidate >
+					<div class="form-group">
+						<label class="col-xs-4  col-md-4 control-label" localize="外网IP">外网IP</label>
+						<div class="col-xs-4  col-md-4">
+							<input class="form-control nodirty" placeholder="" type="text" ng-model="outerIP" maxlength="15" ng-pattern="/^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/" required>
+						</div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-primary" ng-class="{disabled:outerIPForm.$invalid || IP_Btn_unable}" ng-click="save_outer_IP()" localize="保存"> 保存 </button>
+                            <img ng-show="IP_Btn_unable" src="img/loadingtext.gif" width="30px" height="30px"  alt="">
+                        	<i ng-class="{opacity:outerIPForm_suc}" class="fa txt-color-greenjj succuss-tag-icon icon-jj-Complete"></i>
+                        </div>
+                        <div class="col-xs-2  col-md-2"  >
+                        	<!-- <img ng-show="rootBtn_unable" src="img/loadingtext.gif" width="30px" height="30px"  alt="">
+                        	<i ng-class="{opacity:rootForm_suc}" class="fa txt-color-greenjj succuss-tag-icon icon-jj-Complete"></i> -->
+                        </div>
+					</div>
+					<!-- <div class="form-group">
+                        <span class="help-block padding-10 text-align-center"><i class="fa fa-warning"></i> <span localize="MESS_ROOTNEED"></span></span>
+					</div> -->
+				</form>
+				
+			</div>
+			<div class="tab-pane fade" id="s4">
+				<form class="padding-20  form-horizontal " name="hostPasswordForm" novalidate >
+					<div class="form-group">
+						<label class="col-xs-4  col-md-4 control-label" localize="MESS_SAVEROOT">请保存当前主机的root密码:</label>
+						<div class="col-xs-4  col-md-4">
+							<input class="form-control nodirty" placeholder="" type="password" ng-model="new_pwd" maxlength="10" required>
+						</div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-primary" ng-class="{disabled:hostPasswordForm.$invalid || rootBtn_unable}" ng-click="savePWD()" localize="保存"> 保存 </button>
+                            <img ng-show="rootBtn_unable" src="img/loadingtext.gif" width="30px" height="30px"  alt="">
+                        	<i ng-class="{opacity:rootForm_suc}" class="fa txt-color-greenjj succuss-tag-icon icon-jj-Complete"></i>
+                        </div>
+                        <div class="col-xs-2  col-md-2"  >
+                        	<!-- <img ng-show="rootBtn_unable" src="img/loadingtext.gif" width="30px" height="30px"  alt="">
+                        	<i ng-class="{opacity:rootForm_suc}" class="fa txt-color-greenjj succuss-tag-icon icon-jj-Complete"></i> -->
+                        </div>
+					</div>
+					<div class="form-group">
+                        <span class="help-block padding-10 text-align-center"><i class="fa fa-warning"></i> <span localize="MESS_ROOTNEED"></span></span>
+					</div>
+				</form>
+				
+			</div>
+
+			<div class="tab-pane fade" id="s5">
+				<form class="padding-20  form-horizontal " name="hostMaxInstanceForm" novalidate>
+					<div class="form-group">
+						<label class="col-xs-4  col-md-4 control-label" localize="MESS_MAXINSTANCE">可同时运行的最大桌面数:</label>
+						<div class="col-xs-3  col-md-3 form-group">
+							<input type="text" class="form-control nodirty" placeholder="{{item.max_instance}}"  ng-model="max_instance"  ng-pattern="/^\s*[1-9][0-9]?\s*$/" required>
+						</div>
+						 <div class="col-xs-4">
+                            <button type="button" class="btn btn-primary" ng-class="{disabled:hostMaxInstanceForm.$invalid || insBtn_unable}" ng-click="saveMaxInstance()" localize="保存"> 保存 </button>
+                            <img ng-show="insBtn_unable" src="img/loadingtext.gif" width="30px" height="30px"  alt="">
+                        	<i ng-class="{opacity:insForm_suc}" class="fa txt-color-greenjj icon-jj-Complete succuss-tag-icon"></i>
+                        </div>
+                       <!--  <div class="col-xs-2  col-md-2"  >
+                        	<img ng-show="insBtn_unable" src="img/loadingtext.gif" width="30px" height="30px"  alt="">
+                        	<i ng-class="{opacity:insForm_suc}" class="fa txt-color-greenjj icon-jj-Complete succuss-tag-icon"></i>
+                        </div> -->
+					</div>
+					<div class="form-group">
+						<div class="col-xs-offset-4">
+                        	<span class="help-block padding-10"><i class="fa fa-warning"></i> <span localize="重启服务器生效"></span></span>
+                        </div>
+					</div>
+				</form>
+
+			</div>
+			<!-- 保留功能不删除 begin-->
+			<!-- <div class="tab-pane fade in" id="s3">
+				<div class="table-responsive">
+					<table class="table table-hover table-bordered">
+						<thead>
+							<tr>
+								<th>模板名</th>
+								<th>系统空间大小</th>
+								<th>本机桌面数</th>
+								<th>创建时间</th>
+								<th>更新时间</th>
+								<th>状态</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="item in s3">
+								<td>{{item.name}}</td>
+								<td>{{item.size}}GB/{{item.allSize}}GB </td>
+								<td>{{item.count}}</td>
+								<td>{{item.creattime.getDate()}}日{{item.creattime.getHours()}}:{{item.creattime.getMinutes()}}</td>
+								<td>{{item.updatetime.getDate()}}日{{item.updatetime.getHours()}}:{{item.updatetime.getMinutes()}}</td>
+								<td>{{item.state}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane fade in" id="s4">
+				<div class="table-responsive">
+					<table class="table table-hover table-noborderd">
+						<tbody>
+							<tr data-ng-repeat="item in s4">
+								<td width="30">{{item.name}}:</td>
+								<td>{{item.cont}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div> -->
+			<!-- 保留功能不删除 end-->
+		</div>
+	</div>
+</div>
+
+<!-- end widget content -->
+</div>

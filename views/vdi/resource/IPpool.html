@@ -1,0 +1,81 @@
+<section id="widget-grid">
+	<div class="row">
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div data-widget-grid class="jarviswidget">
+				<header class="nobgheader">
+					<div class="col-sm-9">
+					</div>
+					<div class="col-sm-3 text-right">
+				
+					</div>
+				</header>
+				<!-- widget div-->
+				<div class="noborder">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body no-padding">
+						<div class="form-inline no-footer">
+							<div class="dt-toolbar">
+								<div class="left_side col-xs-6 col-sm-6">
+									<a class="btn btn-xs btn-primary"  href="#/resource/network"><i class="fa  icon-jj-recovery"></i>&nbsp;<span localize="返回">返回</span></a>
+									<a class="btn btn-xs btn-primary"  href="javascript:" data-dialog="newNetworkIPDialog" data-dialog-url="resource/IP_new.html" data-dialog-size="md"><i class="fa  icon-jj-addddd"></i>&nbsp;<span localize="调整范围">调整范围</span></a>
+									<!-- <a class="btn btn-xs btn-danger isBatch" data-ng-click="delete()" href="javascript:" data-ng-class="{disabled:!checkOne()}"><i class="fa icon-jj-delete"></i>&nbsp;<span localize="删除">删除</span></a> -->
+								</div>
+								<div class="right_side col-xs-6 col-sm-6">
+									<div class="pull-right filter"> <span localize="显示"></span> <input min="1" type="number" input-number class="mysmallinput"  ng-change="pageSizeChange()" data-ng-model="pagesize"></input> <span localize="项结果"></span> </div>
+								</div>
+							</div>
+						</div>
+						<div class="table-responsive">
+							<table data-vdi-grid
+								class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox table-vertical-center"
+								width="100%">
+								<thead class="vdi_header">
+									<tr>
+										<!-- <th><label class="checkbox"><input type="checkbox" data-ng-model="checkedAll" data-ng-change="selectAllChange(checkedAll)" data-ng-checked="checkAll(all)" name="checkbox-inline"><i></i></label></th> -->
+										<th localize="禁用启用">启用/禁用</th>
+
+										<th style="width:200px;cursor:pointer;"  ng-model="IPSort" ng-click="IPSort = !IPSort;sortIP(IPSort)">IP</th>
+										<th ng-model="allocatedSort" ng-click="allocatedSort = !allocatedSort;sortAllocated(allocatedSort)" localize="已分配">已分配</th>
+										<th localize="分配对象">分配对象</th>
+										<th ng-model="usedSort" ng-click="usedSort = !usedSort;sortUsed(usedSort)" localize="已使用">已使用</th>
+										<th localize="使用对象">使用对象</th>
+										<th localize="说明">说明</th>
+									</tr>
+								</thead>
+								<tbody class="vdi_body">
+									
+									<tr data-ng-repeat="item in rows | filter:searchText | paging:currentPage:pagesize:rows">
+										<!-- <td><label class="checkbox"><input data-ng-model="item._selected" data-ng-checked="item._selected" type="checkbox" data-ng-value="item.id" name="checkbox-inline"><i></i></label></td> -->
+										<td>
+											 <span class="switch">
+	                                            <input type="checkbox" name="start_interval" class="switch-checkbox" id="start_interval{{$index}}" ng-model="item.able" ng-change="switchable(this)">
+	                                            <label for="start_interval{{$index}}" class="switch-label" data-swchon-text="ON" data-swchoff-text="OFF">
+	                                            </label>
+                                            </span>
+										</td>
+										<td class="text-left">{{ item.address }}</td>
+										<td><i class="fa txt-color-greenjj" ng-class="{'icon-jj-Complete': item.allocated}"></i></td>
+										<td>{{ item.assignOwner }}</td>
+										<td><i class="fa txt-color-greenjj" ng-class="{'icon-jj-Complete':item.has_used}"></i></td>
+										<td>{{ item.user }}</td>
+										<td>{{ item.type }}</td>
+				
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="tips" data-ng-if="loading"  localize="LOADING_TEXT">数据正在加载...</div>
+						<div class="tips" data-ng-if="!loading && rows.length == 0"  localize="NO_MATCHING_DATA">没有匹配数据</div>
+						<div data-ng-include="'includes/pagination.html'"></div>
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<script>pageSetUp();</script>

@@ -1,0 +1,72 @@
+<div class="modal-body no-padding">
+	<form action="" name="addClassroomFrom" class="smart-form form-horizontal checkout_form" novalidate>
+		<header class="myheader"><span data-localize="编辑教室"></span><button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button></header>
+		<fieldset >
+			<div class="row">
+				<section class="col col-6">
+					<label class="label" data-localize="名称"></label>
+					<label class="input" data-ng-class="{'state-success':addClassroomFrom.name.$valid && addClassroomFrom.name.$dirty,'state-error':addClassroomFrom.name.$invalid && addClassroomFrom.name.$dirty}" >
+						<input data-ng-class="{formelemetdis:data.name == 'default'}"
+							type="text"
+							name="name"
+							data-ng-minlength="{{min_namelength}}" data-ng-maxlength="{{max_namelength}}" data-localize="LENGTH_LIMIT" param1="{{min_namelength}}" param2="{{max_namelength}}"
+							required
+							data-ng-model="data.name"
+							data-ng-trim="false"
+							data-ng-disabled="data.name == 'default'"
+						>
+					</label>
+				</section>
+				<section class="col col-6">
+					<label class="label" data-localize="网络"></label>
+					<label class="select" style="position: relative;">
+						<select data-ng-class="{terminalscldis:data.sceneCount != 0}" data-ng-options="(network.dhcp == false ? network.name:network.name + '(' + network.dhcp_start + '~' + network.dhcp_end + ')') for network in networks track by network.id"
+							data-ng-model="data.network">
+						</select>
+						<span class="parameterdisabled" title="该教室下已经存在了场景，无法修改其网络" data-ng-if="data.sceneCount != 0"></span>
+					</label>
+				</section>
+			</div>
+			<div class="row">
+				<section class="col col-6">
+					<label class="label" data-localize="描述"></label>
+					<label class="textarea" data-ng-class="{'state-error':addClassroomFrom.desc.$invalid && addClassroomFrom.desc.$dirty}">
+						<textarea 
+							rows="4"
+							name="desc"
+							data-localize="不能超过30位字符"
+							data-ng-maxlength="30"
+							maxlength="30"
+							data-ng-model="data.desc"
+							data-ng-trim="false"
+						>
+						</textarea>
+					</label>
+				</section>
+				<section class="col col-6">
+					<label class="label" localize="终端开始IP">终端开始IP</label>
+					<label class="text classroomNet">
+						<!-- <div data-ng-if="!data.dhcp"></div> -->
+						<input type="text" name="start_ip" format-ip ng-model="data.ip_start" ng-required="data.ip_end">
+					</label>
+					<label class="label" localize="终端结束IP">终端结束IP</label>
+					<label class="text classroomNet">
+						<!-- <div data-ng-if="!data.dhcp"></div> -->
+						<input type="text" format-ip ng-model="data.ip_end" ng-required="data.ip_start">
+					</label>
+				</section>			
+			</div>	
+			
+		</fieldset>
+		<footer class="text-right">
+			<button type="submit" name="submit" class="btn btn-primary myfooterbtn"
+					data-ng-disabled="addClassroomFrom.$invalid || isUnchanged()" 
+					data-ng-click="edit()" data-localize="确定"></button>
+			<button type='reset' name="reset" class="btn btn-default myfooterbtn"
+					data-ng-disabled="isUnchanged()" 
+					data-ng-click="reset()" data-localize="重置"></button>
+			
+		</footer>
+	</form>
+</div>
+

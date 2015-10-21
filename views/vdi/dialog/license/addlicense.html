@@ -1,0 +1,41 @@
+<div class="modal-header">
+	<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" data-localize='更新授权'></h4>
+</div>
+<div class="modal-body">  
+	<ol>
+		<li data-localize='LICENSE1' param1='{{ex.url}}'></li>
+		<li data-localize='LICENSE2'></li>
+        <li data-localize='LICENSE3'></li>
+	</ol>
+	<div class="license-div clearfix">
+		<div class="btn btn-default" id="uploadISO"> </div>
+	</div>
+
+</div>
+<div class="modal-footer">
+	<!--<a class="btn btn-sm btn-success" href="javascript:$('#uploadISO').uploadify('upload')">		-->
+		<!--<i class="glyphicon glyphicon-ok"></i>确认注册-->
+	<!--</a>-->
+	<!--<button type="button" class="btn btn-sm btn-danger" data-ng-click="close()">-->
+		<!--<i class="glyphicon glyphicon-remove">-->
+		<!--</i>-->
+		<!--取消注册-->
+	<!--</button>-->
+</div>
+<div class="text-center">
+	<ul class="license-info">
+		<li data-localize='噢易云计算'></li>
+		<li data-ng-if="version != 'korean' && version != 'dev_fan'"><a href='http://www.os-easy.com' target="_blank">www.os-easy.com</a></li>
+		<li data-ng-if="version == 'korean'"><a href='http://www.s2network.co.kr' target="_blank">www.s2network.co.kr</a></li>
+		<li data-ng-if="version == 'dev_fan'"><a href='http://www.acctc.com.tw' target="_blank">www.acctc.com.tw</a></li>
+	</ul>
+</div>
+<style>
+#uploadISO{
+	margin-right: 30px;
+}
+.uploadify-queue{
+	width: 283px;
+}
+</style>

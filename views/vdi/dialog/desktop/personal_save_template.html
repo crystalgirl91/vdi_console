@@ -1,0 +1,157 @@
+<div class="modal-header" data-ng-init="is_copy=false">
+	<button type="button" class="close" data-ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title" localize="存为模板" data-ng-if="is_copy">存为模板</h4>
+	<h4 class="modal-title" localize="COPY_TEM" data-ng-if="!is_copy">模板另存为</h4>
+</div>
+<div class="modal-body">
+	<form class="form-horizontal ng-pristine ng-valid" name="saveTemplate" novalidate>
+		<div data-ng-if="currentItem" class="form-group">
+			<label class="col-xs-3 control-label" localize="桌面名">桌面</label>
+			<div class="col-xs-9">
+				<label class="control-label">{{currentItem.display_name}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label required" localize="模板名称">模板名称</label>
+			<div class="col-xs-9">
+				<input class="form-control" type="text" ng-model="name" required data-ng-minlength="2" data-ng-maxlength="20" data-localize="LENGTH_LIMIT" param1="{{2}}" param2="{{20}}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label required" localize="模板类型">模板类型</label>
+			<div class="col-xs-9">
+				<label class="radio radio-inline">
+					<input type="radio" class="radiobox" name="style-0a" ng-model="type" value="1" required>
+					<span localize="教学模板">教学模板</span> 	
+				</label>
+				<label class="radio radio-inline">
+					<input type="radio" class="radiobox" name="style-0a" ng-model="type" value="2">
+					<span localize="个人模板">个人模板</span>  
+				</label>
+			</div>
+		</div>
+		<div ng-show="false">
+			<div class="form-group">
+				<label class="col-xs-3 control-label"  localize="硬件模板">硬件模板</label>
+				<div class="col-xs-9">
+					<select class="form-control" data-ng-model="hardware" data-ng-options="hardware.name for hardware in hardwareList track by hardware.id" >
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-3  control-label">
+					<label class="control-label">硬件信息</label>
+				</label>
+				<label class="col-xs-3  control-label text-left">
+					<span localize="处理器">处理器:</span>
+					<label class="control-label">{{hardware.cpu_num}}核</label>
+				</label>
+					
+		    	<label class="col-xs-2  control-label text-left" >
+		    		<span localize="内存">内存:</span>
+		    		<label class="control-label">{{hardware.memory_mb}}G</label>
+		    	</label>
+
+				<label class="col-xs-4  control-label text-left">
+					<span  localize="系统盘">系统盘:</span>
+					<label class="control-label">{{hardware.system_gb}}G / </label>
+					<span  localize="数据盘">数据盘:</span>
+					<label class="control-label">{{hardware.local_gb}}G</label>
+				</label>
+
+			</div>
+		</div>
+		<!-- 	<div ng-show="hardware.length">
+				<div class="form-group">
+					<label class="col-xs-3 control-label" localize="处理器">处理器</label>
+					<div class="btn-group col-xs-7">
+				        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="1">1核</label>
+				        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="2">2核</label>
+				        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="4">4核</label>
+				        <label class="btn btn-default" data-ng-model="hardware.cpu_num" btn-radio="8">8核</label>
+				         <div class="input-group my_input_group">
+					      <input class="form-control" type="text"
+								required
+								data-ng-model="hardware.cpu_num"
+								data-ng-pattern="/^\s*[1-8]\s*$/"
+								data-ng-trim="false"
+					      >
+					      <span></span>
+					      <div class="input-group-addon">G</div>
+					    </div>
+			    	</div>
+			    	<label class="col-xs-2 note hardwarenote">1-8核</label>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label" localize="内存">内存</label>
+					<div class="btn-group col-xs-7">
+				        <label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="1">1G</label>
+				        <label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="2">2G</label>
+			    		<label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="3">3G</label>
+				        <label class="btn btn-default" data-ng-model="hardware.memory_mb" btn-radio="4">4G</label>
+				        <div class="input-group my_input_group">
+					      <input class="form-control" type="text"
+								required
+								data-ng-model="hardware.memory_mb"
+								data-ng-pattern="/^\s*[1-8]\s*$/"
+								data-ng-trim="false"
+					      >
+					      <span></span>
+					      <div class="input-group-addon">G</div>
+					    </div>
+			    	</div>
+			    	<label class="col-xs-2 note hardwarenote">1-8G</label>
+			    </div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label" localize="数据盘">数据盘</label>
+					<div class="col-xs-7">
+						<div class="btn-group" style="width:100%;">
+					        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="10">10G</label>
+					        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="20">20G</label>
+					        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="30">30G</label>
+					        <label class="btn btn-default" data-ng-model="hardware.local_gb" btn-radio="40">40G</label>
+						    <div class="input-group my_input_group">
+						      <input class="form-control" type="number" max="100" min="0" data-ng-model="hardware.local_gb" required>
+						      <span></span>
+						      <div class="input-group-addon">G</div>
+						    </div>
+						</div>
+					</div>
+					<label class="col-xs-2 note hardwarenote">0-100G</label>
+				</div>
+			</div> -->
+	<!-- 	</div> -->
+		<div class="form-group " data-ng-if="is_copy">
+			<label class="col-xs-3 control-label" localize="分类">分类</label>
+			<div class="col-xs-9">
+				<select class="form-control" data-ng-model="$parent.classify" data-ng-options="classify.value for classify in classifys" required>
+				</select> 
+				<!-- <p class="help-block">以"_64"结尾的为64位操作系统</p> -->
+			</div>
+
+		</div>
+		<div class="form-group ">
+			<label class="col-xs-3 control-label" localize="所有人">所有人</label>
+			<div class="col-xs-9">
+				<select class="form-control" data-ng-options="owner.name for owner in owners" data-ng-model="$parent.owner" required>
+				</select> 
+			</div>
+		</div>
+	</form>
+	<footer class="text-right">
+		<img data-ng-if="temCopy" src="./img/building.gif" width="24px">
+		<button ng-if="!submiting" type="button" class="btn btn-primary" ng-class="{disabled:saveTemplate.$invalid}" data-ng-disabled="temCopy" ng-click="ok()" localize="确定">
+			确定
+		</button>
+		<button type="button" class="btn btn-default" ng-click="close()" localize="取消" ng-if="!submiting && !afterSubmiting">
+			取消
+		</button>
+<!-- 		<a ng-if="afterSubmiting && (type=='2')" class="btn btn-primary" localize="查看模板" href="#/template/personal">
+			查看模板
+		</a>
+		<a ng-if="afterSubmiting && (type=='1')" class="btn btn-primary" localize="查看模板" href="#/template/teach">
+			查看模板
+		</a> -->
+		<img src="img/loadingtext.gif" alt="" ng-if="submiting" class="loadingtext" style="width:24px;height:24px;"> 
+	</footer>
+</div>

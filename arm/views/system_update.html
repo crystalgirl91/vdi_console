@@ -1,0 +1,20 @@
+<section id='widget-grid'>
+	<div>
+		<div class='modal-header'>
+			<button type='button' class='close' data-ng-click='close()'>
+				<span>×</span>
+			</button>
+			<h4 class='modal-title modal-title-sm' id='mySmallModalLabel' localize='系统升级'>系统升级</h4>
+		</div>
+		<div class='modal-body'>
+			<p class="text-center" data-ng-if="!isupdate" localize="SYSTEMUPDATE1">请插入升级U盘，点击开始更新进行更新</p>
+			<p class="text-center" data-ng-if="nospace" localize="空间不够">空间不够</p>
+			<p class="text-center" data-ng-if="nofile" localize="SYSTEMUPDATE2">未检测到升级文件，请重新升级</p>
+			<p class="text-center" data-ng-if="updating" localize="SYSTEMUPDATE3">系统正在升级，请勿关闭电源或移除U盘，升级成功后系统将会自动重启。</p>
+			<footer class="text-right">
+				<button class='arm-btn arm-btn-sm arm-btn-primary' data-ng-click='update()' data-ng-disabled="updating" localize="开始更新">开始更新</button>
+			</footer>
+
+		</div>
+	</div>
+</section>

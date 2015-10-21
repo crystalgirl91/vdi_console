@@ -1,0 +1,26 @@
+<div>
+	<form class="form-horizontal sever-form" name="serverForm">
+		<div class="form-group form-group-sm">
+			<label class="control-label col-sm-4" localize='服务器地址'></label>
+			<div class="col-sm-5">
+				<input name="serverIP" ng-change="ser_err ='';btn_unable = false" ip-input class="form-control input-md" type="text"  ng-model="ip" ng-required="true"></input>
+			</div>
+		</div>
+		<div class="form-group form-group-sm">
+			<label class="control-label col-sm-4" localize="端口"></label>
+			<div class="col-sm-5">
+				<input type="text" name="serverPort"  ng-change="ser_err ='';btn_unable = false" class="form-control form-control-sm" ng-model="port" required="true"></input>
+			</div>
+		</div>
+		<!-- <div class="form-group form-group-sm" ng-show="false">
+			<label class="control-label col-sm-4" localize='MQ地址'>MQ地址</label>
+			<div class="col-sm-5">
+				<input ng-change="ser_err =''" ip-input class="form-control input-md" type="text"  ng-model="mq_ip" required></input>
+			</div>
+		</div> -->
+		<p class="promt"><span>{{ser_err}}</span></p>
+		<div class="modal-footer">
+			<button ng-disabled="serverForm.$invalid || btn_unable" type="submit" class="arm-btn arm-btn-sm arm-btn-default" localize="保存" ng-click="serverOk()">保存</button>
+		</div>
+	</form>
+</div>

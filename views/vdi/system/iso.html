@@ -1,0 +1,100 @@
+<section id="widget-grid">
+	<div class="row">
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div data-widget-grid class="jarviswidget">
+				<header class="nobgheader">
+					<div class="col-xs-12" style="padding-left: 8px;">
+						<span data-localize="选择类型"></span>&nbsp;&nbsp;
+						<select class="selectclassroomName filter" ng-model="select" ng-change="filter_iso(select)">
+							<option localize="所有" value=''>所有</option>
+							<option localize="系统包" value='system'>系统包</option>
+							<option localize="软件包" value='package'>软件包</option>
+							<option localize="其它" value='other'>其它</option>
+						</select>
+					</div>	
+				</header>
+				<!-- widget div-->
+				<div class="noborder">
+					<div class="widget-body no-padding">
+						<div class="form-inline no-footer">
+							<div class="dt-toolbar">
+								<div class="col-sm-6 col-xs-6 col-md-6 flex"
+									 ui-web-upload="system_iso_upload"
+									 ui-upload-config="uploadConfig"
+									 ui-upload-limit="10G"
+									 ui-upload-btn-name="上传iso"
+									 ui-upload-url="/thor/isos"
+									 finish-handel="finishUpload()"
+								></div>
+								<!-- <div class="col-sm-6 col-xs-6 col-md-6">
+									<div id="uploadISO" class=" btn btn-primary"> </div>
+									<div id="UploadProgress"></div>
+								</div> -->
+								<div class="right_side col-xs-6 col-sm-6">
+									<div class="pull-right filter"> <span localize="显示"></span> <select data-ng-model="pagesize" data-ng-change="pageSizeChange()" data-ng-options="pagesize for pagesize in pagesizes"></select> <span localize="项结果"></span> </div>
+									<div class="pull-right dataTables_filter search"><label><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> <input type="search" maxlength="20" class="form-control" ng-model="searchText" ng-change="updataData()"></label></div>
+								</div>
+							</div>
+						</div>
+						<div class="table-responsive">
+							<table data-vdi-grid
+								class="table table-striped table-condensed table-hover smart-form has-tickbox">
+								<thead class="vdi_header">
+									<tr>
+                                        <th localize="类型">类型</th>
+										<th ng-model="isoNameSort" ng-click="isoNameSort = !isoNameSort;sort('name', isoNameSort)" localize="ISO名">ISO名</th>
+										<th localize="大小">大小</th>
+
+                                        <th ng-model="autoSort" ng-click="autoSort = !autoSort;sort('support_auto_install', autoSort)" localize="自动安装">自动安装</th>
+										<th localize="系统类型">系统类型</th>
+
+										<th ng-model="isoTimeSort" ng-click="isoTimeSort = !isoTimeSort;sort('created_at', isoTimeSort)" localize="上传时间">上传时间</th>
+										<th localize="操作">操作</th>
+									</tr>
+								</thead>
+								<tbody class="vdi_body">
+									<tr data-ng-init="editable = false" data-ng-repeat="item in rows | filter:searchText | paging:currentPage:pagesize">
+										<td class="nowrap">
+											<b ng-if="item.os_type && item.os_type['key'] != 'other' && item.os_type['key']!='package' && item.os_type!= 'other' && item.os_type!='package'" localize="系统包"></b>
+											<b ng-if="item.os_type && (item.os_type['key'] == 'other' || item.os_type == 'other')" localize="其它"></b>
+											<b ng-if="item.os_type && (item.os_type['key'] == 'package' || item.os_type == 'package')" localize="软件包"></b>
+										</td>
+										<td><div class="break_all">{{ item.name }}</div></td>
+										<td>
+											<span data-ng-if="item.size && item.size>=1024">{{ item.size/1024 | number:2 }}GB</span>
+											<span data-ng-if="item.size && item.size<1024">{{ item.size | number:2 }}MB</span>
+										</td>
+
+                                        <td >
+                                        	<span localize="支持" ng-if="item.support_auto_install"></span>
+                                        	<span localize="不支持" ng-if="!item.support_auto_install"></span>
+                                        </td>
+										<td >
+                                            <span ng-show="!editable" localize="{{item.os_type.value}}">{{item.os_type.value}}</span>
+											<select ng-show="editable" data-ng-disabled="!editable" data-ng-model="item.os_type" data-ng-options="os_type.value for os_type in os_types track by os_type.key">
+											</select>
+										</td>
+
+										<td>{{ item.created_at | date:"yyyy-MM-dd HH:mm:ss"  }}</td>
+										<td class="nowrap">
+											<button class="btn btn-xs btn-default" ng-show="!item.support_auto_install && !editable" ng-click="editable = true" localize-title="编辑"><i class="fa icon-jj-Write"></i></button>
+											<button class="btn btn-xs btn-default" ng-show="!item.support_auto_install && editable" ng-click="change(item);editable = false" localize-title="保存"><i class="fa icon-jj-Preservation"></i></button>
+											<button class="btn btn-xs btn-default" ng-click="delete(item)" localize-title="删除"><i class="fa icon-jj-delete"></i></button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="tips" data-ng-if="loading" localize="LOADING_TEXT">数据正在加载...</div>
+					<div class="tips" data-ng-if="!loading && rows.length == 0"  localize="NO_MATCHING_DATA">没有匹配数据</div>
+					<div data-ng-include="'includes/pagination.html'"></div>
+				</div>
+				<!-- widget div end -->
+			</div>
+		</article>
+	</div>
+</section>
+<script>
+pageSetUp();
+</script>

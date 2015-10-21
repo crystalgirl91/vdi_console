@@ -1,0 +1,45 @@
+{
+	"main": "./index.html",
+	"name": "Client",
+	"description": "os-easy client",
+	"version": "4.1.0",
+
+	"node-remote": "*",
+	"chromium-args": "--args --disable-web-security --allow-file-access-from-files",
+	"js-flags": "--harmony --es_staging",
+
+	"inject-js-start": "",
+	"inject-js-end": "",
+	"dom_storage_quota": 10,
+	"no-edit-menu": true,
+	"window": {
+		"title": "VDI Client",
+		"toolbar": true,
+		"frame": true,
+
+		"width": 1024,
+		"height": 600,
+		"position": "center",
+		"min_width": 960,
+		"min_height": 600,
+		"max_width": 1280,
+		"max_height": 1000,
+
+
+		"as_desktop": true,
+		"resizable": true,
+		"always-on-top": false,
+		"fullscreen": false,
+		"show_in_taskbar": true,
+		"show": true,
+		"trasparent": false,
+		"visible-on-all-workspaces": true,
+		"kiosk": false
+	},
+	"single-instance":true,
+	"webkit": {
+		"plugin": true,
+		"java": false,
+		"page-cache": false
+	}
+}

@@ -1,0 +1,32 @@
+<div class="frame">
+	<div class="piece-group">
+		<div class="piece piece-large piece-yellow" ng-class="{'lock': $root.lock_desk}">
+			<a class="piece-cont" href="#/teaching">
+				<span class="piece-icon"><i class="icon" data-ng-class="{'icon-arm-teaching': version != 'cloudPC', 'icon-arm-public': version == 'cloudPC'}"></i></span>
+				<div>
+					<h3 class="text bigtext" localize="教学桌面"></h3>
+					<h5 class="text smalltext">Teaching desktop</h5>
+				</div>
+			</a>
+		</div>
+		<div class="piece piece-large piece-green" ng-class="{'lock': $root.lock_desk}">
+			<a class="piece-cont" href="#/login?type=1">
+				<span class="piece-icon"><i class="icon" data-ng-class="{'icon-arm-personal': version != 'cloudPC', 'icon-arm-proper': version == 'cloudPC'}"></i></span>
+				<div>
+					<h3 class="text bigtext" localize="个人桌面"></h3>
+					<h5 class="text smalltext">Personal desktop</h5>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="bar bottom-bar" >
+		<div class="bar-item bar-item-long bar-item-blue">
+			<span localize="COPYRIGTH">版权所有：武汉噢易云计算有限公司</span><span>{{l_version}}</span>
+		</div>
+	</div>
+	<!-- <div class="option-group">
+		<div class="option" ng-click="setting_confirm()"><i class="icon icon-arm-set"></i><span localize='设置'></span></div>
+		<div class="option" ng-click="shutdown_confirm()"><i class="icon icon-arm-shutdown"></i><span localize='关机'></span></div>
+		<div class="option" ng-click="reboot_confirm()"><i class="icon icon-arm-restart"></i><span localize='重启'></span></div>
+	</div> -->
+</div>

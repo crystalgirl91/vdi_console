@@ -1,0 +1,94 @@
+<section id="widget-grid">
+	<div class="row">
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div data-widget-grid class="jarviswidget">
+				<header class="nobgheader">
+				</header>
+				<!-- widget div-->
+				<div class="noborder">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body no-padding">
+						<div class="form-inline no-footer">
+							<div class="dt-toolbar">
+								<div class="col-xs-6 col-sm-6">
+                                    <button class="btn btn-primary btn-xs dropdown-toggle isBatch" data-toggle="dropdown"><i class="fa icon-jj-addddd"></i> <span localize="新增">新增</span>&nbsp;<span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="isBatch text-center" href="javascript:" ng-click="open_storage_dialog('logic')" localize="普通网络"></a></li>
+                                        <li><a class="isBatch text-center" href="javascript:" ng-click="open_storage_dialog('vlan')">VLAN</a></li>
+                                    </ul>
+								</div>
+								<div class="right_side col-xs-6 col-sm-6">
+									<div class="pull-right filter"> <span localize="显示"></span> <select   ng-change="pageSizeChange()" data-ng-model="pagesize"data-ng-options="pagesize for pagesize in pagesizes"></select> <span localize="项结果"></span> </div>
+								</div>
+							</div>
+						</div>
+						<div class="table-responsive">
+							<table data-vdi-grid
+								class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox table-vertical-center">
+								<thead class="vdi_header">
+									<tr>
+                                        <th localize="名称">名称</th>
+                                        <th localize="类型">类型</th>
+                                        <th localize="是否启用系统分配">DHCP</th>
+                                        <th localize="IP范围">IP 范围</th>
+
+										<th localize="子网掩码">子网掩码</th>
+										<th localize="网关">网关</th>
+                                        <th>DNS</th>
+										<th>VLAN ID</th>
+
+                                        <th localize="操作">操作</th>
+									</tr>
+								</thead>
+								<tbody class="vdi_body">
+									
+									<tr data-ng-repeat="item in rows | paging:currentPage:pagesize:rows">
+                                        <td>{{item.name}}</td>
+                                        <td>
+	                                        <span ng-if="item.type!=='logic'">{{item.type}}</span>
+	                                        <span ng-if="item.type=='logic'" localize="普通网络"></span>
+                                        </td>
+                                        <td>
+                                            <span class="switch">
+	                                            <input type="checkbox" name="start_interval" class="switch-checkbox" id="start_interval{{$index}}" ng-model="item.dhcp" ng-change="switchdhcp(this)" ng-disabled="!item.dhcp_start">
+	                                            <label for="start_interval{{$index}}" class="switch-label" data-swchon-text="ON" data-swchoff-text="OFF">
+	                                            </label>
+                                            </span>
+                                           <!--  <span ng-show="item.type=='nat' || !item.dhcp_start">
+                                            	<span ng-if="item.dhcp" localize="是"></span>
+                                            	<span ng-if="!item.dhcp" localize="否"></span>
+                                            </span> -->
+                                        </td>
+                                        <td><a href="#/resource/network/{{item.id}}">{{[item.dhcp_start,item.dhcp_end] | join :' - '}}</a></td>
+
+										<td>{{ item.netmask }}</td>
+										<td>{{ item.gateway }}</td>
+                                        <td>{{([item.dns1,item.dns2]) | join :' , '}}</td>
+										<td>{{ item.vlanid }}</td>
+
+                                        <td class="nowrap"> 
+                                        	<div ng-show="item.type!=='bridge'">
+                                        		<abbr class="abbr-title" localize-title='不可编辑'><button class="btn btn-xs btn-default" ng-disabled="item.un_edit" ng-show="item.un_edit" ng-click="update(item,$index)"><i class="fa icon-jj-Write"></i></button></abbr>
+                                        		<button localize-title='编辑' class="btn btn-xs btn-default" ng-disabled="item.un_edit" ng-show="!item.un_edit" ng-click="update(item,$index)"><i class="fa icon-jj-Write"></i></button>
+                                        		<button localize-title='删除' class="btn btn-xs btn-default" ng-click="delete(item,$index)"><i class="fa icon-jj-delete"></i></button>
+                                        	</div>
+                                        </td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="tips" data-ng-if="loading"  localize="LOADING_TEXT">数据正在加载...</div>
+						<div class="tips" data-ng-if="!loading && rows.length == 0"  localize="NO_MATCHING_DATA">没有匹配数据</div>
+						<div data-ng-include="'includes/pagination.html'"></div>
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<script>pageSetUp();</script>

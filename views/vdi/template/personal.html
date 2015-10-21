@@ -1,0 +1,98 @@
+<section>
+	<div class="row">
+		<article class="col-xs-12 col-sm-12 col-md-12 col-sm-12">
+			<div data-widget-grid class="jarviswidget">
+				<header class="nobgheader">
+					<div class="col-xs-12"
+						data-localize="TEMPLATE_DESC"
+                    	data-localize-title="HELP"
+                    	param1="{{rows.length}}"
+                    	param2="{{running || 0}}"
+                    	param3="{{shutoff || 0}}">
+					</div>
+				</header>
+				<!-- widget div-->
+				<div class="noborder">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body no-padding">
+						<section class="dt-toolbar">
+							<div class="left_side col-xs-12">
+								<a class="btn btn-xs btn-primary" data-dialog="addPersonalTemplateDialog" data-dialog-size="md" data-dialog-url="template/template_personal_add.html"><i class="icon-jj-addddd fa"></i> <span data-localize="新增"></span></a>
+								<a class="btn btn-xs btn-danger isBatch" data-ng-class="{disabled:!checkOne()}" data-ng-click="delete()" href="javascript:"><i class="icon-jj-delete fa"></i> <span data-localize="删除"></span></a>
+								<a class="btn btn-xs btn-primary" data-dialog="registerPersonalTemplateDialog" data-dialog-size="md" data-dialog-url="template/template_teach_register.html" href="javascript:"><i class="icon-jj-delete fa"></i> <span data-localize="注册"></span></a>
+							</div>
+							<div class="right_side"></div>
+						</section>
+						<div class="table-responsive noborderbottom">
+							<div class="padding-20">
+								<div class="row teach_myrow">
+							        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4" data-id="{{item.id}}" data-ng-repeat="item in rows">
+							            <div class="panel pricing-big relative" data-ng-class="{'panel-darken':item.status!='alive','panel-primary':item.status=='alive'}">
+							                <div class="panel-heading smart-form mypanelhead">
+							                	<div class="checkbox row">
+							                		<div class="col-md-1 col-sm-1 col-xs-1">
+							                			<label class="checkbox-inline">
+															<input data-ng-model="item._selected" data-ng-checked="item._selected" type="checkbox" data-ng-value="item.id" name="checkbox-inline" class="checkbox style-0"><span></span>
+														</label>
+								                		</div>
+													<h2 class="head-title col-md-11 col-sm-11 col-xs-11" title="{{item.image_id}}"><span>{{item.name}}</span><div class="mynote"><span data-ng-if="item.status=='update failed'" data-localize="TEMPLATE_UPDATE_FAILED"></span><span data-ng-if="item.status=='updating'" data-localize="TEMPLATE_UPDATING"></span><span data-ng-if="item.status=='cloning'" data-localize="TEMPLATE_CLONING"></span></div></h2>
+												</div>
+							                    <div class="panel-cont flex">
+							                    	<div class="panel-pic">
+							                    		<div class="pic-wrap">
+							                    			<img ng-src="img/ajax-loader.gif" data-ng-if="item.status =='making' || item.status =='syncing'">
+							                    			<img ng-src="img/{{ item.icon || 'win7.png' }}" data-ng-if="item.status !== 'making' && item.status !== 'syncing'">
+							                    		</div>
+							                    		<div data-ng-if="item.status!='making' && item.status !='syncing'" style="margin-bottom:4px;">
+							                    			<p class="pic-version">{{item.os_type}}</p>
+							                    			<p class="memsize">{{item.is_64==true? 64:32}}Bit</p>
+							                    		</div>
+							                    		<div class="panel-status">
+							                    			<p data-ng-if="item.status=='making'" data-localize="MAKING"></p>
+							                    			<p data-ng-if="item.status=='installed'" data-localize="INSTALLED"></p>
+								                    		<p data-ng-if="item.status=='syncing'" data-localize="SYNCING"></p>
+								                    		<p data-ng-if="item.status=='building'" data-localize="BUILDING"></p>
+								                    		<p data-ng-if="item.status=='registering'" data-localize="REGESTER"></p>
+							                    		</div>
+							                    	</div>
+								                    <ul class="panel-mess">
+								                    	<li class="panel-item">
+								                    		<label data-localize="已用/总大小"></label>
+								                    		<div class="item-flex">{{item.size_desc}}G/{{item.size_total}}G</div>
+								                    	</li>
+								                    	<li class="panel-item">
+								                    		<label data-localize="关联桌面数"></label>
+								                    		<div class="item-flex">{{item.instance_count}}</div>
+								                    	</li>
+								                    	<li class="panel-item">
+								                    		<label data-localize="创建者"></label>
+								                    		<div class="item-flex">{{item.owner_desc}}</div>
+								                    	</li>
+								                    	<li class="panel-item">
+								                    		<label data-localize="创建时间"></label>
+							                    			<div class="item-flex">{{item.created_at | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+								                    	</li>
+								                  	</ul>
+							                  	</div>
+							                </div>
+							                <div class="panel-footbar" data-ng-class="{'darken':item.status!='alive','primary':item.status=='alive'}">
+						                		<a data-id="{{ item.id }}" data-os-type="{{ item.os_type }}" data-ng-if="item.status=='alive' || item.status =='making' || item.status =='installed'" onclick="window.open('templateModify.html#' + this.getAttribute('data-id') + '&' + this.getAttribute('data-os-type'),'_new','location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false;" href="javascript:" class="icon" data-localize-title="编辑模板"><i class="fa icon-jj-edit"></i></a>
+						                		<a target="_blank" href="{{ domain }}/thor/image/download/{{ item.id }}" data-ng-if="item.status=='alive'" class="icon" data-localize-title="下载模版"><i class="fa icon-jj-Download"></i></a>
+						                		<a href="javascript:void(0)" data-ng-if="item.status=='alive'" class="icon" data-localize-title="COPY_TEM" data-ng-click="copy(item)"><i class="fa icon-jj-copy"></i></a>
+												<span class="mylili"><a href="javascript:void(0)" class="icon" data-localize-title="删除模版"  data-ng-click="delete(item)"><i class="fa fa-trash-o" data-ng-class="{disabled_ico:item.instance_count > 1? true:false}"></i></a><span class="parameterdisabled" data-ng-if="item.instance_count > 1? true:false" data-localize-title="TEMPLATE_DELETE_TIP"></span></span>
+												<a class="icon" data-ng-if="item.status =='update failed'" data-id="{{ item.id }}" onclick="window.open('templateModify.html#' + this.getAttribute('data-id') + '&' + this.getAttribute('data-os-type'),'_new','location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false;" href="javascript:" data-localize-title="查看详情"><i class="fa icon-jj-look"></i></a>
+							                </div>
+							            </div>
+							        </div>
+					    		</div>
+					    		<div class="tips" data-ng-if="loading" data-localize="LOADING_TEXT"></div>
+								<div class="tips" data-ng-if="!loading && rows.length == 0" data-localize="NO_MATCHING_DATA"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</div>
+</section>
+<script>pageSetUp();</script>

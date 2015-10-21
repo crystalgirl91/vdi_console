@@ -1,0 +1,27 @@
+<section id='widget-grid'>
+	<div>
+		<div class='modal-header'>
+			<button type='button' class='close' data-ng-click='close()'>
+				<span>×</span>
+			</button>
+			<h4 class='modal-title modal-title-sm' id='mySmallModalLabel' localize='设置'>设置</h4>
+		</div>
+		<div class='modal-body'>
+			<form class='form-horizontal' name="setting_confirm" novalidate>
+				<div class="form-group form-group-sm">
+					<label for="" class="col-sm-4 control-label control-label-sm" localize="密码">密码</label>
+					<div class="col-sm-7">
+						<input data-control-autofocus class="form-control form-control-border form-control-sm" ng-change="pwd_err = ''" type="password" ng-model="rootPwd" required></input>
+					</div>
+				</div>
+				<footer class='text-right form-group'>
+					<div class="col-sm-11">
+						<span class="promt inline-promt">{{pwd_err}}</span>
+						<button class='arm-btn arm-btn-sm arm-btn-primary' data-ng-click='ok()' localize='确定' ng-disabled="setting_confirm.$invalid">确定</button>
+						<button class='arm-btn arm-btn-sm arm-btn-default' data-ng-click='close()' style='margin-left:5px;' localize='取消'>取消</button>
+					</div>
+				</footer>
+			</form>
+		</div>
+	</div>
+</section>

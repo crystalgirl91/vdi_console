@@ -1,0 +1,156 @@
+<div ng-controller="settingNetworkController">
+	<my-tab class="tab tab-row">
+		<ul class="nav nav-tabs">
+			<li localize="网络设置"></li>
+			<li localize="网络诊断"></li>
+		</ul>
+		<div class="tab-content">
+			<!-- 网络设置 -->
+			<div class="tab-pane">
+				<form class="form-horizontal ipconfig-form" name="networkConfigForm" novalidate>
+
+					<fieldset ng-show="client_type===0">
+						<legend>
+							<label class="radiobox">
+								<input type="radio" value="0" ng-disabled="submiting" ng-model="wireType" ng-change="change_type(wireType)">
+								<span localize="有线">有线</span>
+							</label>
+							<label class="radiobox">
+								<input type="radio" value="1" ng-disabled="submiting" ng-model="wireType" ng-change="change_type(wireType)">
+								<span localize="无线">无线</span>
+							</label>
+						</legend>
+					</fieldset>
+					<fieldset>
+						<ul class="net-ul" ng-show="wireType == 0">
+							<li class="net-item">
+								<span localize="网络连接" class="net-label">网络连接</span>
+								<select ng-change="change_net_type(netType)" ng-model="netType" class="net-control">
+									<option value="0" localize="静态IP">静态IP</option>
+									<option value="1">DHCP</option>
+									<option value="2" ng-show="client_type===0" localize="系统获取">系统获取</option>
+									<!-- <option value="3" ng-show="client_type===0" localize="无线">无线</option> -->
+								</select>
+							</li>
+							<li class="net-item">
+									<span localize="IP地址" class="net-label">IP地址</span>
+									<input type="text" name="ip" ip-input ng-model="netIp" ng-disabled="netType==1||netType==2"  ng-change="net_err=''" ng-required="netType==0">
+							</li>
+							<li class="net-item">
+									<span localize="子网掩码" class="net-label">子网掩码</span>
+									<input type="text" name="mask" ip-input ng-model="netMask" ng-disabled="netType==1||netType==2"  ng-change="net_err=''" ng-required="netType==0">
+							</li>
+							<li class="net-item">
+									<span localize="网关" class="net-label"></span>
+									<input type="text" name="gateway" ip-input ng-model="netGateway" ng-disabled="netType==1||netType==2"  ng-change="net_err=''" ng-required="netType==0">
+							</li>
+							<li class="net-item">
+									<span class="net-label">DNS1</span>
+									<input type="text" name="dns" ip-input ng-model="netDNS" ng-disabled="netType==1||netType==2" ng-change="net_err=''" >
+							</li>
+							<li class="net-item">
+									<span class="net-label">DNS2</span>
+									<input type="text" name="dns2" ip-input ng-model="netDNS2" ng-disabled="netType==1||netType==2" ng-change="net_err=''" >
+							</li>
+						</ul>
+						<ul ng-show="wireType ==1">
+							<!-- <li class="net-item">
+								<span class="net-label">WLAN</span>
+								<input type="checkbox" ng-model="isWlan" ng-change="get_wlan(isWlan)">
+							</li> -->
+							<li class="net-item">
+								<span class="net-label"></span>
+								<dl class="net-control wlan-list">
+									<!-- <dt class="wlan-loading" ng-if="wifiLoading"><img src="img/loading.gif"></dt> -->
+									<dd ng-repeat="wlan in wlans track by $index" class="wlan-item" ng-class="{'selected':selectedWlan === wlan}" ng-click="select_wlan(wlan)">
+										<span>{{wlan}}</span>
+										<span class="icon wifi_list_icon" ng-class="{'icon-arm-Next':!show_detail,'icon-arm-minimize':show_detail}" ng-show="wifiNet.name === wlan" ng-click="show_detail = !show_detail"></span>
+										<ul class="wifi_list_detail" ng-if="wifiNet.name === wlan" ng-class="{'on':show_detail}">
+											<li><span class="wifi_detail_label" localize="IP地址"></span>{{wifiNet.address}}</li>
+											<li><span class="wifi_detail_label"localize="子网掩码"></span>{{wifiNet.mask}}</li>
+											<li><span class="wifi_detail_label"localize="网关"></span>{{wifiNet.gateway}}</li>
+											<li><span class="wifi_detail_label">DNS1</span>{{wifiNet.dns1}}</li>
+											<li><span class="wifi_detail_label">DNS1</span>{{wifiNet.dns2}}</li>
+										</ul>
+									</dd>
+								</dl>
+							</li>
+							<li class="net-item">
+								<span class="net-label" localize="密码">密码</span>
+								<input type="password" ng-model="wifi_password" maxlength="20" name="wlanPassword" class="net-control" ng-change="net_err = ''">
+							</li>
+						</ul>
+						
+					</fieldset>
+					<p class="promt">{{ net_err }}</p>
+					<fieldset class="footer-btn">
+						<!-- <label ng-show="getting || connecting"><span localize="正在获取">正在获取.. </span><time>{{out_time}}</time></label> -->
+						<!-- <span class="arm-btn arm-btn-sm arm-btn-default" ng-click="get_dhcp()" ng-show="netType==1" ng-disabled="getting || connecting" localize="保存">保存</span>
+						<span class="arm-btn arm-btn-sm arm-btn-default" ng-click="get_oss()" ng-show="netType==2" ng-disabled="getting || connecting" localize="保存">保存</span>
+						<span class="arm-btn arm-btn-sm arm-btn-default" ng-show="netType==3" ng-disabled="!selectedWlan || !wifi_password || wifi_connecting" localize='保存' ng-click="save_wifi_config()">保存</span> -->
+						<span ng-show="wireType == 0"  class="arm-btn arm-btn-sm arm-btn-default" ng-disabled="(netType==0&&networkConfigForm.$pristine)||networkConfigForm.$invalid || submiting" localize='保存' ng-click="save_net_config()"></span>
+						<span ng-show="wireType == 1"  class="arm-btn arm-btn-sm arm-btn-default" ng-disabled="getWifiBtnAble() || submiting" localize='保存' ng-click="save_wifi_config()"></span>
+					</fieldset>	
+				</form>
+			</div>
+			<!-- 网络诊断 -->
+			<div class="tab-pane">
+				<form class="pingForm form-horizontal ipconfig-form" name="pingForm">
+						<div class="form-group form-group-sm">
+							<label localize='IP地址' class="col-xs-3 control-label"></label>
+							<div class="col-xs-6">
+								<input class="form-control input-ex" type="text" ng-model="ping_ip" maxlength="20 " required></input>
+							</div>
+						</div>
+						<div class="form-group form-group-sm">
+							<div class="col-sm-9 col-sm-offset-3">
+								<div>
+									<label class="radiobox">
+										<input type="radio" value="1" ng-model="pingType" ng-change="clear_ping_count()">
+										<span localize="持续发送ping包">持续发送ping包</span>
+									</label>
+								</div>
+								<div>
+									<label class="radiobox">
+										<input type="radio" value="0" ng-model="pingType" ng-change="clear_ping_count()">
+										<span>
+											<span localize="自定义">自定义</span>
+											<input type="number" class="form-control form-control-inline input-xs" localize="ping包数" ng-model="ping_count" ng-disabled="pingType==1" min="1" max="1000" ng-required="pingType==0">
+										</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					<!-- <div class="rows">
+						<fieldset>
+							<legend>
+								<label class="radiobox">
+									<input type="radio" value="1" ng-model="pingType" ng-change="clear_ping_count()">
+									<span>持续发送ping包</span>
+								</label>
+							</legend>
+						</fieldset>
+						<fieldset>
+							<legend>
+								<label class="radiobox">
+									<input type="radio" value="0" ng-model="pingType" ng-change="clear_ping_count()">
+									<span>自定义ping包数<input class="form-control input-sm" type="number" ng-model="ping_count" ng-disabled="pingType==1" ng-required="!pingType"></input></span>
+								</label>
+							</legend>
+						</fieldset>
+					</div> -->
+					<div class="rows">
+						<div class="">
+							<button class="arm-btn arm-btn-sm arm-btn-primary" type="button" ng-disabled="(pingForm.$invalid) || ping_submit" ng-click="go_ping()">ping</button>
+							<button class="arm-btn arm-btn-sm arm-btn-default" type="button" ng-click="cancel_ping()" localize='取消'></button>
+							<!-- <button class="arm-btn arm-btn-sm arm-btn-default" type="submit" localize="尝试修复"></button> -->
+						</div>
+					</div> 
+				</form>
+				<div class="block">
+					<textarea class="form-control input-sm" rows="6" ng-model="ping_result" disabled></textarea>
+				</div>
+			</div>
+		</div>
+	</my-tab>
+</div>

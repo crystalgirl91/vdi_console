@@ -1,0 +1,180 @@
+<section id="widget-grid">
+		<div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" ng-click="close()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+	          <h4 class="modal-title" id="mySmallModalLabel" data-localize="新增教学模板"></h4>
+	        </div>
+	        <div class="modal-body">
+	          <!-- widget content -->
+					<div class="jarviswidget-color-darken" id="wid-id-2" data-widget-editbutton="false" data-widget-deletebutton="false" role="widget" >
+						<!-- widget div-->
+						<div role="content" >
+
+							<div data-wizard data-last-text="完成" class="widget-body fuelux" style="position: relative; padding-bottom: 40px">
+								<div class="step-pane active" data-wizard-step data-name="基本信息" data-done="{{ name.$invalid }}">
+									<form name="step_pane0" ng-class="{is_error:error}">
+									<!-- wizard form starts here -->
+										<div class="form-group">
+											<label class="col-xs-3 control-label required" data-localize="模板名"></label>
+											<div class="col-xs-6">
+												<input class="form-control"
+													type="text"
+													name="name"
+													required
+													data-ng-model="name"
+													data-ng-minlength="{{ min_namelength }}"
+													data-ng-maxlength="{{ max_namelength }}"
+													data-ng-trim="false"
+												>
+											</div>
+											<label class="col-xs-3 note" data-localize="LENGTH_LIMIT" param1="{{min_namelength}}" param2="{{max_namelength}}"></label>
+										</div>
+										<div class="form-group ">
+											<label class="col-xs-3 control-label" for="select-1" data-localize="所有人"></label>
+											<div class="col-xs-6">
+												<select class="form-control" ng-model="owner" data-ng-options="owner.name for owner in users track by owner.id"></select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-xs-3 control-label" for="select-1"></label>
+											<div class="col-xs-6" data-localize="WRONG_NAME" data-ng-if="sameName"></div>
+										</div>
+									</form>
+								</div>
+
+								<div class="step-pane active" data-wizard-step data-name="配置硬件">
+									<form name="step_pane1" ng-class="{is_error:error}">
+										<div class="form-group">
+											<label class="col-xs-4 control-label" for="select-1" data-localize="选择模板"></label>
+											<div class="col-xs-7">
+												<select class="form-control" id="select-1" ng-model="template"  data-ng-options="template.name for template in hardware_templates">
+													
+												</select>
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label class="col-xs-4 control-label" data-localize="处理器"></label>
+											<div class="btn-group col-xs-8">
+										        <label class="control-label">{{template.cpu_num}} <span data-localize="核"></span></label>
+									    	</div>
+										</div>
+										
+										<div class="form-group">
+											<label class="col-xs-4 control-label" data-localize="内存"></label>
+											<div class="col-xs-8">
+												 <label class="control-label">{{template.memory_mb}}MB</label>
+											</div>
+									    </div>
+										<div class="form-group">
+											<label class="col-xs-4 control-label" data-localize="系统盘"></label>
+											<div class="col-xs-8">
+												<label class="control-label">{{template.system_gb}}GB</label>
+											</div>
+									    </div>
+<!-- 										<div class="form-group">
+											<label class="col-xs-4 control-label" data-localize="数据盘"></label>
+											<div class="col-xs-8">
+												<label class="control-label">{{template.local_gb}}GB</label>
+											</div>
+									    </div>  -->   
+									</form>
+								</div>
+
+								<div class="step-pane active" data-wizard-step data-name="安装方法">	
+									<form name="step_pane2" ng-class="{is_error:error}">
+											<div class="form-group">
+												<label class="col-xs-2 control-label" data-localize="安装方式"></label>
+												<div class="col-xs-10">
+													<div class="tabs" role="tablist" id="switchCheckTab">
+														<label class="radio radio-inline" id="install1">
+															<input type="radio" class="radiobox" value="autoinstall" name="style-0a" data-ng-model="install" data-ng-click="isos = auto_isos;$parent.iso = undefined" data-ng-change="checked(true)">
+															<span data-localize="自动安装"></span> 
+															
+														</label>
+														<label class="radio radio-inline" id="install2">
+															<input type="radio" class="radiobox" value="manualinstall" name="style-0a" data-ng-model="install" data-ng-click="isos = all_isos;$parent.iso = undefined" data-ng-change="checked(false)">
+															<span data-localize="手动安装"></span>  
+														</label>
+													</div>
+													<div class="tab-content" id="switchCheckItem">
+														<p class="help-block" data-ng-if="install=='autoinstall'" data-localize="AUTO_INSTALL_TIP"></p>
+														<p class="help-block" data-ng-if="install=='manualinstall'" data-localize="MANUAL_INSTALL_TIP"></p>
+													</div>
+													
+												</div>
+											</div>
+										
+											<div class="form-group">
+											<label class="col-xs-2 control-label" for="multiselect1" data-localize="选择ISO"></label>
+											<div class="col-xs-10">
+												<span style='line-height: 32px;' data-ng-if="isos.length==0 && install=='manualinstall'" data-localize='SYSISOTIP1'></span>
+												<span style='line-height: 32px;' data-ng-if="isos.length==0 && install=='autoinstall'" data-localize='SYSISOTIP2'></span>
+												<select multiple="multiple" required id="multiselect1" class="form-control custom-scroll select-iso" data-ng-model="$parent.iso" data-ng-options="iso.name for iso in isos">
+												</select>
+											</div>
+										</div>
+									</form>
+								</div>
+
+								<div class="step-pane active" data-wizard-step data-name="完成" >	
+									<form name="step_pane3" ng-class="{is_error:error}">
+										<div data-ng-if="install=='autoinstall'">
+											<h6 class="barrey text-center" style="font-weight: normal;" data-localize="配置系统详情"></h6>
+											<div class="form-group">
+												<label class="col-xs-3 control-label required" data-localize="windows产品秘钥"></label>
+												<div class="col-xs-8">
+													<input class="form-control" data-localize="KEY_PATTERN" type="text"
+															data-ng-trim="false" required data-ng-model="$parent.key" data-ng-pattern="/^\s*([A-Z0-9]{5}\-){4}[A-Z0-9]{5}\s*$/">
+												</div>
+											</div>
+										<div class="form-group">
+												<label class="col-xs-3 control-label" for="select-1" data-localize="要装的windows版本"></label>
+												<div class="col-xs-8">
+													<select class="form-control" id="select-1" ng-model="$parent.system_version" data-ng-options="system_version for system_version in $parent.iso[0].os_type"></select> 
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-xs-3 control-label" data-localize="用户名"></label>
+												<div class="col-xs-8">
+													<input class="form-control"
+														type="text"
+														data-ng-model="$parent.userName" 
+														disabled>													
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-xs-3 control-label" data-localize="密码"></label>
+												<div class="col-xs-8">
+													<input class="form-control"
+													type="password"
+													data-localize="LENGTH_LIMIT"
+													data-ng-model="$parent.userPassword"
+													data-ng-minlength="{{ min_passwordLe }}" 
+													data-ng-maxlength="{{ max_passwordLe }}"
+													param1="{{min_passwordLe}}" param2="{{max_passwordLe}}"
+													data-ng-trim="false">
+												</label>
+												</div>
+											</div>
+										</div>
+										<div data-ng-if="install=='manualinstall'" >
+											<span class="fa fa-check-square-o ico_complete"></span>
+											<p style="text-indent: 2em; text-align: center;" data-localize="COMPLETE_INFOR"></p><br>
+										</div>
+									</form>
+								</div>
+									
+		
+							</div>
+							<!-- end widget content -->
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget content -->
+	        </div>
+      </div>
+
+</section>
+
+

@@ -1,0 +1,32 @@
+<section id='widget-grid'>
+	<div>
+		<div class='modal-header'>
+			<button type='button' class='close' data-ng-click='close()'>
+				<span>×</span>
+			</button>
+			<h4 class='modal-title text-center' id='mySmallModalLabel' localize='设置'>设置</h4>
+		</div>
+		<div>
+			<div class="go-panel flex flex-row">
+				<my-tab class="tab tab-col ">
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="active"><i class="icon icon-big icon-arm-host"></i><span localize="服务器地址"></span></li>
+						<li class=""><i class="icon icon-big icon-arm-network"></i><span localize="NET"></span></li>
+						<li class=""><i class="icon icon-big icon-arm-win8"></i><span localize="系统"></span></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane ">
+							<div ng-include="'./views/setting_server.html'" ng-controller="settingServerController"></div>
+						</div>
+						<div class="tab-pane ">
+							<div  ng-include="'./views/setting_network.html'"></div>
+						</div>
+						<div class="tab-pane ">
+							<div  ng-include="'./views/setting_system.html'" ng-controller="settingSystemController"></div>
+						</div>
+					</div>
+				</my-tab>
+			</div>
+		</div>
+	</div>
+</section>
